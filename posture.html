@@ -177,9 +177,14 @@ textarea.inp{resize:none;}
         <div class="sec-title" style="color:var(--sage);margin-bottom:10px">🔗 신규 회원 상담지 링크</div>
         <div style="font-size:12px;color:var(--text3);margin-bottom:12px;line-height:1.7">회원이 직접 작성 후 제출하면 대기 상담 탭에 자동으로 나타나요.</div>
         <div class="share-url-box" id="form-url">링크 생성 중...</div>
-        <div class="row">
+        <div class="row" style="margin-bottom:10px">
           <button class="btn-ghost" style="flex:1" onclick="copyFormUrl()">📋 링크 복사</button>
           <button class="btn-ghost" style="flex:1" onclick="shareFormUrl()">💬 카카오 공유</button>
+        </div>
+        <div style="border-top:1px solid var(--sage-border);padding-top:12px;margin-top:4px">
+          <div style="font-size:11px;font-weight:700;color:var(--sage);margin-bottom:8px">📸 상담지 커버 사진 설정</div>
+          <div class="mb10"><span class="lbl">커버 사진 URL</span><input class="inp" id="cover-url" placeholder="https://..." oninput="updateFormPhotos()" style="font-size:12px;"></div>
+          <div><span class="lbl">로고 사진 URL</span><input class="inp" id="logo-url" placeholder="https://..." oninput="updateFormPhotos()" style="font-size:12px;"></div>
         </div>
       </div>
 
@@ -206,15 +211,23 @@ textarea.inp{resize:none;}
           <div class="radio-item" id="ex-no" onclick="setRadio('exercise','no',false)"><span class="ci-icon">❌</span><span class="ci-text">없음</span></div>
         </div>
         <div class="mb10"><span class="lbl">운동 경험 상세</span><input class="inp" id="ev-exercise-detail" placeholder="예) 헬스 2년, 요가 6개월"></div>
-        <div class="sub-title">평소 생활 습관</div>
+      </div>
+
+      <!-- 생활 습관 -->
+      <div class="card">
+        <div class="sec-title">🪑 평소 생활 습관</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:12px;line-height:1.7">자세와 통증에 영향을 주는 습관이에요.<br>해당되는 항목을 모두 선택해주세요.</div>
         <div class="check-grid">
-          <div class="ci" onclick="toggleCI('habit-sit',this,false)"><span class="ci-icon">🪑</span><span class="ci-text">오래 앉아 있음</span></div>
-          <div class="ci" onclick="toggleCI('habit-stand',this,false)"><span class="ci-icon">🧍</span><span class="ci-text">오래 서 있음</span></div>
-          <div class="ci" onclick="toggleCI('habit-lie',this,false)"><span class="ci-icon">🛋</span><span class="ci-text">오래 누워 있음</span></div>
-          <div class="ci" onclick="toggleCI('habit-heavy',this,false)"><span class="ci-icon">📦</span><span class="ci-text">무거운 물건 자주 듦</span></div>
-          <div class="ci" onclick="toggleCI('habit-cross',this,false)"><span class="ci-icon">🦵</span><span class="ci-text">다리 꼬는 습관</span></div>
-          <div class="ci" onclick="toggleCI('habit-lean',this,false)"><span class="ci-icon">↔</span><span class="ci-text">한쪽으로 기댐</span></div>
+          <div class="ci" onclick="toggleCI('habit-sit',this,false)"><span class="ci-icon">🪑</span><span class="ci-text">오래 앉아 있음<br><span style="font-size:10px;color:var(--text4)">사무직/재택</span></span></div>
+          <div class="ci" onclick="toggleCI('habit-stand',this,false)"><span class="ci-icon">🧍</span><span class="ci-text">오래 서 있음<br><span style="font-size:10px;color:var(--text4)">서비스직/주부</span></span></div>
+          <div class="ci" onclick="toggleCI('habit-lie',this,false)"><span class="ci-icon">🛋</span><span class="ci-text">오래 누워 있음<br><span style="font-size:10px;color:var(--text4)">소파/침대</span></span></div>
+          <div class="ci" onclick="toggleCI('habit-heavy',this,false)"><span class="ci-icon">📦</span><span class="ci-text">무거운 물건 자주 듦<br><span style="font-size:10px;color:var(--text4)">육아/택배 등</span></span></div>
+          <div class="ci" onclick="toggleCI('habit-cross',this,false)"><span class="ci-icon">🦵</span><span class="ci-text">다리 꼬는 습관<br><span style="font-size:10px;color:var(--text4)">골반 비틀림</span></span></div>
+          <div class="ci" onclick="toggleCI('habit-lean',this,false)"><span class="ci-icon">↔</span><span class="ci-text">한쪽으로 기댐<br><span style="font-size:10px;color:var(--text4)">좌우 불균형</span></span></div>
+          <div class="ci" onclick="toggleCI('habit-phone',this,false)"><span class="ci-icon">📱</span><span class="ci-text">장시간 스마트폰<br><span style="font-size:10px;color:var(--text4)">거북목 패턴</span></span></div>
+          <div class="ci" onclick="toggleCI('habit-bag',this,false)"><span class="ci-icon">👜</span><span class="ci-text">한쪽으로만 가방<br><span style="font-size:10px;color:var(--text4)">어깨 불균형</span></span></div>
         </div>
+        <div><span class="lbl">기타 습관 메모</span><textarea class="inp" id="ev-habit-memo" rows="1" placeholder="기타 반복되는 자세나 습관..."></textarea></div>
       </div>
 
       <!-- 통증 문진 -->
@@ -258,34 +271,45 @@ textarea.inp{resize:none;}
         <div><span class="lbl">기타 직접 입력</span><textarea class="inp" id="ev-health-extra" rows="2" placeholder="위에 없는 질환, 수술 이력, 복용 약물..."></textarea></div>
       </div>
 
-      <!-- 수업 탐색 -->
+      <!-- 운동 목적 & 목표 -->
       <div class="card">
-        <div class="sec-title">🌿 수업 탐색</div>
-        <div class="sub-title">선호하는 수업 스타일</div>
-        <div class="radio-full" id="style-detail" onclick="setRadio('style','detail',false)">디테일한 설명으로 움직임을 정확히 이해하고 싶어요</div>
-        <div class="radio-full" id="style-flow" onclick="setRadio('style','flow',false)">설명보다 흐름에 집중하며 자연스럽게 움직이고 싶어요</div>
-        <div class="radio-full" id="style-explore" onclick="setRadio('style','explore',false)">다양한 움직임을 시도하며 전신의 연결을 경험하고 싶어요</div>
-        <div class="radio-full" id="style-challenge" onclick="setRadio('style','challenge',false)">도전과제가 있으면 동기부여가 돼요</div>
-        <div class="radio-full" id="style-flexible" onclick="setRadio('style','flexible',false)">몸의 컨디션에 따라 유연하게 조절되는 수업이 좋아요</div>
-        <div class="sub-title">개선 목표</div>
-        <textarea class="inp mb10" id="ev-goal" rows="3" placeholder="수업을 통해 개선됐으면 하는 점..."></textarea>
-        <div class="sub-title">선호 요일</div>
+        <div class="sec-title">🌿 운동 목적 & 목표</div>
+        <div class="sub-title">운동 목적 (복수 선택)</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:10px">몸의 기능과 감각</div>
         <div class="check-grid">
-          <div class="ci" onclick="toggleCI('day-mon',this,false)"><span class="ci-text">월요일</span></div>
-          <div class="ci" onclick="toggleCI('day-tue',this,false)"><span class="ci-text">화요일</span></div>
-          <div class="ci" onclick="toggleCI('day-wed',this,false)"><span class="ci-text">수요일</span></div>
-          <div class="ci" onclick="toggleCI('day-thu',this,false)"><span class="ci-text">목요일</span></div>
-          <div class="ci" onclick="toggleCI('day-fri',this,false)"><span class="ci-text">금요일</span></div>
-          <div class="ci" onclick="toggleCI('day-sun',this,false)"><span class="ci-text">일요일</span></div>
+          <div class="ci" onclick="toggleCI('goal-spine',this,false)"><span class="ci-icon">🦴</span><span class="ci-text">척추 건강 & 자세 개선</span></div>
+          <div class="ci" onclick="toggleCI('goal-sense',this,false)"><span class="ci-icon">🌀</span><span class="ci-text">내 몸 감각 깨우기</span></div>
+          <div class="ci" onclick="toggleCI('goal-breath',this,false)"><span class="ci-icon">🌬</span><span class="ci-text">호흡과 움직임 연결</span></div>
+          <div class="ci" onclick="toggleCI('goal-core',this,false)"><span class="ci-icon">💪</span><span class="ci-text">파워하우스 강화</span></div>
+          <div class="ci" onclick="toggleCI('goal-balance',this,false)"><span class="ci-icon">⚖️</span><span class="ci-text">좌우 불균형 개선</span></div>
+          <div class="ci" onclick="toggleCI('goal-flex',this,false)"><span class="ci-icon">🤸</span><span class="ci-text">유연성 & 가동성 향상</span></div>
         </div>
-        <div class="sub-title">선호 시간</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;margin-top:4px">삶의 질 향상</div>
         <div class="check-grid">
-          <div class="ci" onclick="toggleCI('time-early',this,false)"><span class="ci-text">오전 6~10시</span></div>
-          <div class="ci" onclick="toggleCI('time-am',this,false)"><span class="ci-text">오전 10~12시</span></div>
-          <div class="ci" onclick="toggleCI('time-pm',this,false)"><span class="ci-text">오후 12~18시</span></div>
-          <div class="ci" onclick="toggleCI('time-eve',this,false)"><span class="ci-text">저녁 18~20시</span></div>
+          <div class="ci" onclick="toggleCI('goal-daily',this,false)"><span class="ci-icon">🚶</span><span class="ci-text">일상 움직임이 편해지길</span></div>
+          <div class="ci" onclick="toggleCI('goal-energy',this,false)"><span class="ci-icon">✨</span><span class="ci-text">에너지와 활력 회복</span></div>
+          <div class="ci" onclick="toggleCI('goal-stress',this,false)"><span class="ci-icon">🍃</span><span class="ci-text">스트레스 해소 & 심신 안정</span></div>
+          <div class="ci" onclick="toggleCI('goal-weight',this,false)"><span class="ci-icon">🔥</span><span class="ci-text">체형 관리</span></div>
         </div>
-        <div><span class="lbl">하고 싶은 말</span><textarea class="inp" id="ev-memo" rows="2" placeholder="강사에게 전하고 싶은 말..."></textarea></div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;margin-top:4px">도전과 성장</div>
+        <div class="check-grid">
+          <div class="ci" onclick="toggleCI('goal-34',this,false)"><span class="ci-icon">🏆</span><span class="ci-text">34동작 완성 여정</span></div>
+          <div class="ci" onclick="toggleCI('goal-precision',this,false)"><span class="ci-icon">🎯</span><span class="ci-text">정확성과 흐름 탐구</span></div>
+          <div class="ci" onclick="toggleCI('goal-habit',this,false)"><span class="ci-icon">📅</span><span class="ci-text">꾸준한 운동 습관</span></div>
+          <div class="ci" onclick="toggleCI('goal-challenge',this,false)"><span class="ci-icon">🔥</span><span class="ci-text">도전적인 동작 습득</span></div>
+        </div>
+        <div class="mb10"><span class="lbl">기타 목적 직접 입력</span><input class="inp" id="ev-goal-extra" placeholder="예) 골프 퍼포먼스 향상, 무용 기초..."></div>
+
+        <div class="sub-title">운동 빈도 목표</div>
+        <div class="radio-grid">
+          <div class="radio-item" id="freq-1" onclick="setRadio('freq','1',false)"><span class="ci-text">주 1회</span></div>
+          <div class="radio-item" id="freq-2" onclick="setRadio('freq','2',false)"><span class="ci-text">주 2회</span></div>
+          <div class="radio-item" id="freq-3" onclick="setRadio('freq','3',false)"><span class="ci-text">주 3회 이상</span></div>
+          <div class="radio-item" id="freq-flex" onclick="setRadio('freq','flex',false)"><span class="ci-text">유동적으로</span></div>
+        </div>
+
+        <div class="sub-title">하고 싶은 말</div>
+        <textarea class="inp" id="ev-memo" rows="2" placeholder="강사에게 전하고 싶은 말..."></textarea>
       </div>
 
       <!-- 자세 평가 (강사 전용) -->
@@ -473,10 +497,16 @@ textarea.inp{resize:none;}
 
 <!-- ── 회원 상담지 폼 ── -->
 <div id="form-view" class="hidden">
-  <div class="form-hdr">
-    <div class="form-hdr-eye">PILATES STUDIO</div>
-    <div class="form-hdr-title">✍️ 상담지<br>나를 알아가는 첫 걸음</div>
-    <div class="form-hdr-sub">작성 후 제출하면 강사에게 전달돼요.<br>솔직하게 적어주실수록 더 좋은 수업이 됩니다 🌿</div>
+  <div id="form-cover-wrap" style="position:relative;min-height:200px;background:linear-gradient(135deg,var(--brown),var(--brown2));overflow:hidden;">
+    <img id="form-cover-img" style="width:100%;height:220px;object-fit:cover;display:none;opacity:0.7;">
+    <div style="position:absolute;inset:0;padding:36px 24px 24px;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(to bottom,transparent 20%,rgba(60,35,15,0.7));">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+        <img id="form-logo-img" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.5);display:none;">
+        <div class="form-hdr-eye">PILATES STUDIO</div>
+      </div>
+      <div class="form-hdr-title">✍️ 상담지<br>나를 알아가는 첫 걸음</div>
+      <div class="form-hdr-sub" style="margin-top:6px">작성 후 제출하면 강사에게 전달돼요.<br>솔직하게 적어주실수록 더 좋은 수업이 됩니다 🌿</div>
+    </div>
   </div>
   <div class="content">
     <div class="card">
@@ -497,15 +527,22 @@ textarea.inp{resize:none;}
         <div class="radio-item" id="f-ex-no" onclick="setRadio('exercise','no',true)"><span class="ci-icon">❌</span><span class="ci-text">없음</span></div>
       </div>
       <div class="mb10"><span class="lbl">운동 경험 상세</span><input class="inp" id="f-exercise-detail" placeholder="예) 헬스 2년, 요가 6개월"></div>
-      <div class="sub-title">평소 생활 습관</div>
+    </div>
+
+    <div class="card">
+      <div class="sec-title">🪑 평소 생활 습관</div>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:12px;line-height:1.7">자세와 통증에 영향을 주는 습관이에요.<br>해당되는 항목을 모두 선택해주세요.</div>
       <div class="check-grid">
-        <div class="ci" onclick="toggleCI('habit-sit',this,true)"><span class="ci-icon">🪑</span><span class="ci-text">오래 앉아 있음</span></div>
-        <div class="ci" onclick="toggleCI('habit-stand',this,true)"><span class="ci-icon">🧍</span><span class="ci-text">오래 서 있음</span></div>
-        <div class="ci" onclick="toggleCI('habit-lie',this,true)"><span class="ci-icon">🛋</span><span class="ci-text">오래 누워 있음</span></div>
-        <div class="ci" onclick="toggleCI('habit-heavy',this,true)"><span class="ci-icon">📦</span><span class="ci-text">무거운 물건 자주 듦</span></div>
-        <div class="ci" onclick="toggleCI('habit-cross',this,true)"><span class="ci-icon">🦵</span><span class="ci-text">다리 꼬는 습관</span></div>
-        <div class="ci" onclick="toggleCI('habit-lean',this,true)"><span class="ci-icon">↔</span><span class="ci-text">한쪽으로 기댐</span></div>
+        <div class="ci" onclick="toggleCI('habit-sit',this,true)"><span class="ci-icon">🪑</span><span class="ci-text">오래 앉아 있음<br><span style="font-size:10px;color:var(--text4)">사무직/재택</span></span></div>
+        <div class="ci" onclick="toggleCI('habit-stand',this,true)"><span class="ci-icon">🧍</span><span class="ci-text">오래 서 있음<br><span style="font-size:10px;color:var(--text4)">서비스직/주부</span></span></div>
+        <div class="ci" onclick="toggleCI('habit-lie',this,true)"><span class="ci-icon">🛋</span><span class="ci-text">오래 누워 있음<br><span style="font-size:10px;color:var(--text4)">소파/침대</span></span></div>
+        <div class="ci" onclick="toggleCI('habit-heavy',this,true)"><span class="ci-icon">📦</span><span class="ci-text">무거운 물건 자주 듦<br><span style="font-size:10px;color:var(--text4)">육아/택배 등</span></span></div>
+        <div class="ci" onclick="toggleCI('habit-cross',this,true)"><span class="ci-icon">🦵</span><span class="ci-text">다리 꼬는 습관<br><span style="font-size:10px;color:var(--text4)">골반 비틀림</span></span></div>
+        <div class="ci" onclick="toggleCI('habit-lean',this,true)"><span class="ci-icon">↔</span><span class="ci-text">한쪽으로 기댐<br><span style="font-size:10px;color:var(--text4)">좌우 불균형</span></span></div>
+        <div class="ci" onclick="toggleCI('habit-phone',this,true)"><span class="ci-icon">📱</span><span class="ci-text">장시간 스마트폰<br><span style="font-size:10px;color:var(--text4)">거북목 패턴</span></span></div>
+        <div class="ci" onclick="toggleCI('habit-bag',this,true)"><span class="ci-icon">👜</span><span class="ci-text">한쪽으로만 가방<br><span style="font-size:10px;color:var(--text4)">어깨 불균형</span></span></div>
       </div>
+      <div><span class="lbl">기타 습관 메모</span><textarea class="inp" id="f-habit-memo" rows="1" placeholder="기타 반복되는 자세나 습관..."></textarea></div>
     </div>
 
     <div class="card">
@@ -534,32 +571,41 @@ textarea.inp{resize:none;}
     </div>
 
     <div class="card">
-      <div class="sec-title">🌿 수업 탐색</div>
-      <div class="sub-title">선호하는 수업 스타일</div>
-      <div class="radio-full" id="f-style-detail" onclick="setRadio('style','detail',true)">디테일한 설명으로 움직임을 정확히 이해하고 싶어요</div>
-      <div class="radio-full" id="f-style-flow" onclick="setRadio('style','flow',true)">설명보다 흐름에 집중하며 자연스럽게 움직이고 싶어요</div>
-      <div class="radio-full" id="f-style-explore" onclick="setRadio('style','explore',true)">다양한 움직임을 시도하며 전신의 연결을 경험하고 싶어요</div>
-      <div class="radio-full" id="f-style-challenge" onclick="setRadio('style','challenge',true)">도전과제가 있으면 동기부여가 돼요</div>
-      <div class="radio-full" id="f-style-flexible" onclick="setRadio('style','flexible',true)">몸의 컨디션에 따라 유연하게 조절되는 수업이 좋아요</div>
-      <div class="sub-title">개선 목표</div>
-      <textarea class="inp mb10" id="f-goal" rows="3" placeholder="수업을 통해 개선됐으면 하는 점..."></textarea>
-      <div class="sub-title">선호 요일</div>
+      <div class="sec-title">🌿 운동 목적 & 목표</div>
+      <div class="sub-title">운동 목적 (복수 선택)</div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:10px">몸의 기능과 감각</div>
       <div class="check-grid">
-        <div class="ci" onclick="toggleCI('day-mon',this,true)"><span class="ci-text">월요일</span></div>
-        <div class="ci" onclick="toggleCI('day-tue',this,true)"><span class="ci-text">화요일</span></div>
-        <div class="ci" onclick="toggleCI('day-wed',this,true)"><span class="ci-text">수요일</span></div>
-        <div class="ci" onclick="toggleCI('day-thu',this,true)"><span class="ci-text">목요일</span></div>
-        <div class="ci" onclick="toggleCI('day-fri',this,true)"><span class="ci-text">금요일</span></div>
-        <div class="ci" onclick="toggleCI('day-sun',this,true)"><span class="ci-text">일요일</span></div>
+        <div class="ci" onclick="toggleCI('goal-spine',this,true)"><span class="ci-icon">🦴</span><span class="ci-text">척추 건강 & 자세 개선</span></div>
+        <div class="ci" onclick="toggleCI('goal-sense',this,true)"><span class="ci-icon">🌀</span><span class="ci-text">내 몸 감각 깨우기</span></div>
+        <div class="ci" onclick="toggleCI('goal-breath',this,true)"><span class="ci-icon">🌬</span><span class="ci-text">호흡과 움직임 연결</span></div>
+        <div class="ci" onclick="toggleCI('goal-core',this,true)"><span class="ci-icon">💪</span><span class="ci-text">파워하우스 강화</span></div>
+        <div class="ci" onclick="toggleCI('goal-balance',this,true)"><span class="ci-icon">⚖️</span><span class="ci-text">좌우 불균형 개선</span></div>
+        <div class="ci" onclick="toggleCI('goal-flex',this,true)"><span class="ci-icon">🤸</span><span class="ci-text">유연성 & 가동성 향상</span></div>
       </div>
-      <div class="sub-title">선호 시간</div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:10px;margin-top:4px">삶의 질 향상</div>
       <div class="check-grid">
-        <div class="ci" onclick="toggleCI('time-early',this,true)"><span class="ci-text">오전 6~10시</span></div>
-        <div class="ci" onclick="toggleCI('time-am',this,true)"><span class="ci-text">오전 10~12시</span></div>
-        <div class="ci" onclick="toggleCI('time-pm',this,true)"><span class="ci-text">오후 12~18시</span></div>
-        <div class="ci" onclick="toggleCI('time-eve',this,true)"><span class="ci-text">저녁 18~20시</span></div>
+        <div class="ci" onclick="toggleCI('goal-daily',this,true)"><span class="ci-icon">🚶</span><span class="ci-text">일상 움직임이 편해지길</span></div>
+        <div class="ci" onclick="toggleCI('goal-energy',this,true)"><span class="ci-icon">✨</span><span class="ci-text">에너지와 활력 회복</span></div>
+        <div class="ci" onclick="toggleCI('goal-stress',this,true)"><span class="ci-icon">🍃</span><span class="ci-text">스트레스 해소 & 심신 안정</span></div>
+        <div class="ci" onclick="toggleCI('goal-weight',this,true)"><span class="ci-icon">🔥</span><span class="ci-text">체형 관리</span></div>
       </div>
-      <div><span class="lbl">하고 싶은 말</span><textarea class="inp" id="f-memo" rows="3" placeholder="강사에게 전하고 싶은 말을 자유롭게 적어주세요 🌿"></textarea></div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:10px;margin-top:4px">도전과 성장</div>
+      <div class="check-grid">
+        <div class="ci" onclick="toggleCI('goal-34',this,true)"><span class="ci-icon">🏆</span><span class="ci-text">34동작 완성 여정</span></div>
+        <div class="ci" onclick="toggleCI('goal-precision',this,true)"><span class="ci-icon">🎯</span><span class="ci-text">정확성과 흐름 탐구</span></div>
+        <div class="ci" onclick="toggleCI('goal-habit',this,true)"><span class="ci-icon">📅</span><span class="ci-text">꾸준한 운동 습관</span></div>
+        <div class="ci" onclick="toggleCI('goal-challenge',this,true)"><span class="ci-icon">🔥</span><span class="ci-text">도전적인 동작 습득</span></div>
+      </div>
+      <div class="mb10"><span class="lbl">기타 목적 직접 입력</span><input class="inp" id="f-goal-extra" placeholder="예) 골프 퍼포먼스 향상, 무용 기초..."></div>
+      <div class="sub-title">운동 빈도 목표</div>
+      <div class="radio-grid">
+        <div class="radio-item" id="f-freq-1" onclick="setRadio('freq','1',true)"><span class="ci-text">주 1회</span></div>
+        <div class="radio-item" id="f-freq-2" onclick="setRadio('freq','2',true)"><span class="ci-text">주 2회</span></div>
+        <div class="radio-item" id="f-freq-3" onclick="setRadio('freq','3',true)"><span class="ci-text">주 3회 이상</span></div>
+        <div class="radio-item" id="f-freq-flex" onclick="setRadio('freq','flex',true)"><span class="ci-text">유동적으로</span></div>
+      </div>
+      <div class="sub-title">하고 싶은 말</div>
+      <textarea class="inp" id="f-memo" rows="3" placeholder="강사에게 전하고 싶은 말을 자유롭게 적어주세요 🌿"></textarea>
     </div>
 
     <div id="f-submit-wrap">
@@ -631,6 +677,97 @@ let formChecks={}, formRadios={}, formPainChecks={}, formPainScores={}, formPain
 let records=[], pendingForms=[];
 
 function uid(){return"r"+Date.now()+Math.random().toString(36).slice(2,6);}
+
+// ── 웹 푸시 알림 ──────────────────────────────────────────
+async function requestPushPermission(){
+  if(!("Notification" in window)){toast("이 브라우저는 알림을 지원하지 않아요");return;}
+  const perm = await Notification.requestPermission();
+  if(perm==="granted"){
+    localStorage.setItem("push_enabled","1");
+    toast("✅ 알림이 설정됐어요! 새 상담지가 오면 알려드릴게요");
+  } else {
+    toast("⚠ 알림 권한이 거부됐어요. 브라우저 설정에서 허용해주세요");
+  }
+}
+
+function sendPushNotification(name){
+  if(Notification.permission==="granted"){
+    new Notification("📨 새 상담지가 도착했어요!", {
+      body: `${name}님이 상담지를 제출했어요. 확인해보세요 🌿`,
+      icon: localStorage.getItem("logo_url")||"",
+      badge: localStorage.getItem("logo_url")||"",
+      tag: "new-consult",
+    });
+  }
+}
+
+// Supabase Realtime으로 새 상담지 감지
+function subscribeToNewForms(){
+  // Supabase Realtime 연결
+  const ws = new WebSocket(
+    `wss://phbdaxipaenyphwrebjz.supabase.co/realtime/v1/websocket?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBoYmRheGlwYWVueXBod3JlYmp6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5NTA4MTAsImV4cCI6MjA5MDUyNjgxMH0.ScVK7ckOjTS-umOUstlo-CgQAWJ5NpYXoSBrluxqvNM&vsn=1.0.0`
+  );
+  ws.onopen = () => {
+    ws.send(JSON.stringify({topic:"realtime:public:health_forms",event:"phx_join",payload:{},ref:"1"}));
+  };
+  ws.onmessage = (e) => {
+    try {
+      const msg = JSON.parse(e.data);
+      if(msg.event==="INSERT" && msg.payload?.record){
+        const rec = msg.payload.record;
+        if(rec.status==="pending"){
+          // 로컬 배열에 추가
+          pendingForms.unshift(rec);
+          updateBadge();
+          // 토스트 알림
+          showNewFormToast(rec.name);
+          // 웹 푸시
+          sendPushNotification(rec.name);
+        }
+      }
+    } catch(err){}
+  };
+  ws.onerror = () => console.log("Realtime 연결 실패 - 폴링으로 대체");
+}
+
+function showNewFormToast(name){
+  const t = document.getElementById("toast");
+  t.innerHTML = `📨 <strong>${name}</strong>님의 상담지가 도착했어요!`;
+  t.style.background = "var(--yellow)";
+  t.style.cursor = "pointer";
+  t.onclick = () => { go("pending"); t.classList.remove("show"); t.style.background=""; t.style.cursor=""; };
+  t.classList.add("show");
+  setTimeout(()=>{ t.classList.remove("show"); t.style.background=""; t.style.cursor=""; t.onclick=null; }, 6000);
+}
+
+// ── 커버/로고 사진 ─────────────────────────────────────────
+function updateFormPhotos(){
+  const coverUrl = document.getElementById("cover-url")?.value.trim();
+  const logoUrl = document.getElementById("logo-url")?.value.trim();
+  if(coverUrl) localStorage.setItem("cover_url", coverUrl);
+  if(logoUrl) localStorage.setItem("logo_url", logoUrl);
+}
+
+function applyFormPhotos(){
+  const coverUrl = localStorage.getItem("cover_url") || document.getElementById("cover-url")?.value.trim();
+  const logoUrl = localStorage.getItem("logo_url") || document.getElementById("logo-url")?.value.trim();
+  // 회원 폼에 적용
+  const coverImg = document.getElementById("form-cover-img");
+  const logoImg = document.getElementById("form-logo-img");
+  if(coverImg && coverUrl){
+    coverImg.src = coverUrl;
+    coverImg.style.display = "block";
+    coverImg.onerror = () => { coverImg.style.display="none"; };
+  }
+  if(logoImg && logoUrl){
+    logoImg.src = logoUrl;
+    logoImg.style.display = "block";
+    logoImg.onerror = () => { logoImg.style.display="none"; };
+  }
+  // 강사 뷰 input에도 복원
+  if(coverUrl && document.getElementById("cover-url")) document.getElementById("cover-url").value = coverUrl;
+  if(logoUrl && document.getElementById("logo-url")) document.getElementById("logo-url").value = logoUrl;
+}
 function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2400);}
 function fmt(d){if(!d)return"";return new Date(d).toLocaleDateString("ko-KR",{year:"numeric",month:"long",day:"numeric"});}
 function fmtTime(d){if(!d)return"";return new Date(d).toLocaleString("ko-KR",{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"});}
@@ -712,6 +849,10 @@ function setRadio(group, val, isForm){
     ["detail","flow","explore","challenge","flexible"].forEach(s=>{
       document.getElementById(prefix+"style-"+s)?.classList.toggle("on",val===s);
     });
+  } else if(group==="freq"){
+    ["1","2","3","flex"].forEach(s=>{
+      document.getElementById(prefix+"freq-"+s)?.classList.toggle("on",val===s);
+    });
   }
 }
 
@@ -734,8 +875,18 @@ window.addEventListener("DOMContentLoaded",async()=>{
   document.getElementById("ev-date").value=new Date().toISOString().split("T")[0];
   document.getElementById("form-url").textContent=location.href.split("?")[0]+"?form=1";
   renderPainItems("pain-items-instructor",false);
+  applyFormPhotos();
   loadLocal();
   await loadPending();
+  subscribeToNewForms();
+  // 알림 권한 요청 (처음 방문 시)
+  if(Notification.permission==="default"){
+    setTimeout(()=>{
+      if(confirm("새 상담지가 도착하면 알림으로 알려드릴까요?")){
+        requestPushPermission();
+      }
+    }, 2000);
+  }
 });
 
 function loadLocal(){try{records=JSON.parse(localStorage.getItem("consult_records")||"[]");}catch{records=[];}}
@@ -785,7 +936,7 @@ async function loadToConsult(formId){
   document.getElementById("ev-age").value=f.age||"";
   document.getElementById("ev-region").value=f.region||"";
   document.getElementById("ev-exercise-detail").value=f.exercise_detail||"";
-  document.getElementById("ev-goal").value=f.goal||"";
+  document.getElementById("ev-goal-extra").value=f.goal_extra||"";
   document.getElementById("ev-memo").value=f.memo||"";
   document.getElementById("ev-health-extra").value=f.health_extra||"";
   // 체크 반영
@@ -831,7 +982,8 @@ function saveRecord(){
     age:document.getElementById("ev-age").value||"",
     region:document.getElementById("ev-region").value.trim(),
     exerciseDetail:document.getElementById("ev-exercise-detail").value.trim(),
-    goal:document.getElementById("ev-goal").value.trim(),
+    goal:document.getElementById("ev-goal")?.value?.trim()||"",
+    goalExtra:document.getElementById("ev-goal-extra").value.trim(),
     memo:document.getElementById("ev-memo").value.trim(),
     healthExtra:document.getElementById("ev-health-extra").value.trim(),
     painExtra:document.getElementById("ev-pain-extra").value.trim(),
@@ -901,7 +1053,18 @@ function openDetail(id){
   if(habitList.length)html+=`<div style="font-size:12px;color:var(--text2);margin-bottom:5px">🪑 습관: ${habitList.join(", ")}</div>`;
   if(dayList.length)html+=`<div style="font-size:12px;color:var(--text2);margin-bottom:5px">📅 선호: ${dayList.join("·")}요일${timeList.length?" / "+timeList.join(", "):""}</div>`;
   html+=`</div>`;
-  if(r.goal)html+=`<div style="background:var(--sage-bg);border:1px solid var(--sage-border);border-radius:10px;padding:11px;margin-bottom:10px;font-size:13px;color:var(--text);line-height:1.6">🎯 <strong>목표:</strong> ${r.goal}</div>`;
+  // 운동 목적
+  const goalMap={'goal-spine':'척추 건강 & 자세 개선','goal-sense':'내 몸 감각 깨우기','goal-breath':'호흡과 움직임 연결','goal-core':'파워하우스 강화','goal-balance':'좌우 불균형 개선','goal-flex':'유연성 & 가동성 향상','goal-daily':'일상 움직임이 편해지길','goal-energy':'에너지와 활력 회복','goal-stress':'스트레스 해소 & 심신 안정','goal-weight':'체형 관리','goal-34':'34동작 완성 여정','goal-precision':'정확성과 흐름 탐구','goal-habit':'꾸준한 운동 습관','goal-challenge':'도전적인 동작 습득'};
+  const freqMap={'1':'주 1회','2':'주 2회','3':'주 3회 이상','flex':'유동적으로'};
+  const goalList=Object.entries(r.checks||{}).filter(([k,v])=>v&&k.startsWith("goal-")).map(([k])=>goalMap[k]||k);
+  if(goalList.length||r.goalExtra||r.radios?.freq){
+    html+=`<div style="background:var(--sage-bg);border:1px solid var(--sage-border);border-radius:10px;padding:12px;margin-bottom:12px">
+      <div style="font-size:12px;font-weight:700;color:var(--sage);margin-bottom:8px">🌿 운동 목적</div>
+      ${goalList.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:${r.goalExtra||r.radios?.freq?"7px":"0"}">${goalList.map(g=>`<span style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;background:var(--sage-bg);color:var(--sage);border:1px solid var(--sage-border);font-weight:600">${g}</span>`).join("")}</div>`:""}
+      ${r.goalExtra?`<div style="font-size:12px;color:var(--text2);margin-bottom:${r.radios?.freq?"6px":"0"}">+ ${r.goalExtra}</div>`:""}
+      ${r.radios?.freq?`<div style="font-size:12px;color:var(--sage);font-weight:600">📅 목표 빈도: ${freqMap[r.radios.freq]||r.radios.freq}</div>`:""}
+    </div>`;
+  }
   // 통증
   const painList=Object.entries(r.painChecks||{}).filter(([k,v])=>v);
   if(painList.length||r.painExtra){
@@ -961,6 +1124,7 @@ function showFormView(){
   document.getElementById("instructor-view").classList.add("hidden");
   document.getElementById("form-view").classList.remove("hidden");
   renderPainItems("pain-items-form",true);
+  applyFormPhotos();
 }
 
 async function submitForm(){
@@ -977,7 +1141,8 @@ async function submitForm(){
       age:document.getElementById("f-age").value||null,
       region:document.getElementById("f-region").value.trim()||null,
       exercise_detail:document.getElementById("f-exercise-detail").value.trim()||null,
-      goal:document.getElementById("f-goal").value.trim()||null,
+      goal:document.getElementById("f-goal")?.value?.trim()||null,
+      goal_extra:document.getElementById("f-goal-extra").value.trim()||null,
       memo:document.getElementById("f-memo").value.trim()||null,
       health_extra:document.getElementById("f-health-extra").value.trim()||null,
       checks:{...formChecks},
