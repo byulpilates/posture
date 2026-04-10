@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>필라테스 상담 & 자세 평가</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#faf7f2;--bg2:#f3ede3;
+  --border:#e8ddd0;--border2:#d4c4b0;
+  --brown:#7c5c3e;--brown2:#a07850;--brown-light:#c8a97e;
+  --sage:#5a7a5a;--sage-bg:#f0f5ee;--sage-border:#c8ddc0;
+  --red:#c05040;--red-bg:#fdf0ee;--red-border:#e8c0b8;
+  --yellow:#c8942a;--yellow-bg:#fef8ec;
+  --text:#3a2e24;--text2:#6a5a48;--text3:#9a8878;--text4:#c0b0a0;
+  --white:#fff;--shadow:0 2px 16px rgba(122,92,62,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Noto Serif KR',Georgia,serif;min-height:100vh;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
+.app{max-width:480px;margin:0 auto;min-height:100vh;}
+.hidden{display:none!important;}
+
+.hdr{background:var(--brown);padding:28px 24px 20px;}
+.hdr-eye{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.28em;color:var(--brown-light);margin-bottom:6px;}
+.hdr-title{font-size:22px;font-weight:900;color:#fff;margin-bottom:3px;}
+.hdr-sub{font-size:12px;color:#c8a97e99;}
+.nav{background:var(--brown);display:flex;border-top:1px solid #ffffff22;overflow-x:auto;}
+.nb{background:none;border:none;border-bottom:2px solid transparent;padding:10px 13px;font-size:11px;font-family:inherit;font-weight:700;color:#c8a97e99;cursor:pointer;transition:all .2s;white-space:nowrap;margin-bottom:-1px;}
+.nb.on{color:#fff;border-bottom-color:var(--brown-light);}
+
+.content{padding:18px 20px 80px;}
+.card{background:var(--white);border:1px solid var(--border);border-radius:18px;padding:20px;margin-bottom:14px;box-shadow:var(--shadow);}
+.sec-title{font-size:15px;font-weight:700;color:var(--brown);margin-bottom:14px;}
+.lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--text3);text-transform:uppercase;display:block;margin-bottom:7px;}
+.inp{width:100%;padding:11px 14px;background:var(--bg);border:1.5px solid var(--border);border-radius:11px;font-size:13px;font-family:inherit;color:var(--text);outline:none;transition:border .2s;}
+.inp:focus{border-color:var(--brown-light);}
+.inp::placeholder{color:var(--text4);}
+textarea.inp{resize:none;}
+.mb10{margin-bottom:10px;}
+.row{display:flex;gap:8px;}
+
+.btn-brown{background:var(--brown);color:#fff;border:none;border-radius:13px;padding:14px 24px;font-size:14px;font-family:inherit;font-weight:700;cursor:pointer;width:100%;box-shadow:0 3px 12px #7c5c3e25;}
+.btn-brown:hover{background:var(--brown2);}
+.btn-brown:disabled{opacity:.5;cursor:not-allowed;}
+.btn-ghost{background:var(--white);border:1.5px solid var(--border2);color:var(--text2);border-radius:11px;padding:9px 15px;font-size:12px;font-family:inherit;cursor:pointer;}
+.btn-ghost:hover{border-color:var(--brown-light);color:var(--brown);}
+.btn-danger{background:var(--red-bg);color:var(--red);border:1.5px solid var(--red-border);border-radius:10px;padding:8px 14px;font-size:12px;font-family:inherit;cursor:pointer;}
+
+/* CHECK / RADIO */
+.check-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;}
+.ci{display:flex;align-items:center;gap:7px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:9px 11px;cursor:pointer;transition:all .15s;user-select:none;}
+.ci.on{background:var(--bg2);border-color:var(--brown-light);}
+.ci.on .ci-text{color:var(--brown);font-weight:700;}
+.ci.special.on{background:var(--yellow-bg);border-color:#e8d8a0;}
+.ci.special.on .ci-text{color:var(--yellow);}
+.ci-full{display:flex;align-items:center;gap:7px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:9px 11px;cursor:pointer;transition:all .15s;user-select:none;margin-bottom:6px;}
+.ci-full.on{background:var(--bg2);border-color:var(--brown-light);}
+.ci-full.special.on{background:var(--yellow-bg);border-color:#e8d8a0;}
+.ci-full.on .ci-text,.ci-full.special.on .ci-text{color:var(--brown);font-weight:700;}
+.ci-full.special.on .ci-text{color:var(--yellow);}
+.ci-icon{font-size:14px;flex-shrink:0;}
+.ci-text{font-size:12px;color:var(--text2);line-height:1.3;}
+.radio-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;}
+.radio-item{display:flex;align-items:center;gap:7px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:9px 11px;cursor:pointer;transition:all .15s;user-select:none;}
+.radio-item.on{background:var(--sage-bg);border-color:var(--sage-border);}
+.radio-item.on .ci-text{color:var(--sage);font-weight:700;}
+
+/* POSTURE EVAL */
+.eval-item{background:var(--bg);border-radius:12px;padding:12px 14px;margin-bottom:8px;border:1px solid var(--border);}
+.eval-item-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.eval-item-sub{font-size:11px;color:var(--text3);margin-bottom:9px;}
+.score-row{display:flex;gap:5px;margin-bottom:7px;}
+.score-btn{flex:1;padding:8px 3px;border-radius:8px;border:1.5px solid var(--border);background:var(--white);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;text-align:center;color:var(--text3);}
+.score-btn.s1.on{background:#fdf0ee;border-color:#c05040;color:#c05040;}
+.score-btn.s2.on{background:#fdf5f0;border-color:#e07040;color:#e07040;}
+.score-btn.s3.on{background:#fefce0;border-color:#c8942a;color:#c8942a;}
+.score-btn.s4.on{background:#f0faf0;border-color:#5a9a5a;color:#5a9a5a;}
+.score-btn.s5.on{background:#eef5ea;border-color:#3a7a3a;color:#3a7a3a;}
+.score-label{display:flex;justify-content:space-between;font-size:10px;color:var(--text4);margin-bottom:5px;font-family:'DM Mono',monospace;}
+.lr-row{display:flex;gap:6px;margin-bottom:7px;flex-wrap:wrap;}
+.lr-btn{padding:6px 10px;border-radius:8px;border:1.5px solid var(--border);background:var(--white);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;color:var(--text3);}
+.lr-btn.on{background:var(--brown);border-color:var(--brown);color:#fff;}
+.eval-memo{width:100%;padding:7px 11px;background:var(--white);border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-family:inherit;color:var(--text);outline:none;resize:none;}
+.eval-memo:focus{border-color:var(--brown-light);}
+.eval-memo::placeholder{color:var(--text4);}
+.sub-title{font-size:11px;font-weight:700;color:var(--text3);margin:14px 0 9px;letter-spacing:.06em;display:flex;align-items:center;gap:6px;}
+.sub-title::after{content:"";flex:1;height:1px;background:var(--border);}
+
+/* TOTAL SCORE */
+.total-score{background:linear-gradient(135deg,var(--brown),var(--brown2));border-radius:16px;padding:18px;text-align:center;margin-bottom:12px;color:#fff;}
+.total-score-num{font-size:44px;font-weight:900;font-family:'DM Mono',monospace;line-height:1;}
+.total-score-grade{font-size:13px;font-weight:600;margin-top:8px;padding:4px 14px;border-radius:20px;display:inline-block;}
+.score-high{background:#eef5ea;color:#3a7a3a;}
+.score-mid{background:#fefce0;color:#906010;}
+.score-low{background:#fdf0ee;color:#c05040;}
+
+/* LIST */
+.record-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:10px;cursor:pointer;box-shadow:0 1px 6px rgba(122,92,62,.07);}
+.record-card:hover{border-color:var(--border2);}
+.goal-tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;background:var(--sage-bg);color:var(--sage);border:1px solid var(--sage-border);margin:2px;font-weight:600;}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--border);display:inline-block;margin-right:2px;}
+.dot.on{background:var(--brown-light);}
+
+/* PENDING */
+.pending-card{background:var(--yellow-bg);border:1.5px solid #e8d8a0;border-radius:14px;padding:16px;margin-bottom:10px;}
+.pending-badge{display:inline-block;background:var(--yellow);color:#fff;font-size:11px;font-weight:700;padding:2px 10px;border-radius:10px;margin-bottom:8px;font-family:'DM Mono',monospace;}
+.share-url-box{font-family:'DM Mono',monospace;font-size:11px;color:var(--brown);background:var(--bg2);border:1px solid var(--border2);border-radius:11px;padding:12px;word-break:break-all;line-height:1.7;margin-bottom:10px;}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:#3a2e24aa;z-index:200;display:flex;align-items:flex-end;justify-content:center;}
+.modal{background:var(--white);border-radius:22px 22px 0 0;padding:24px 22px 44px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;animation:su .25s ease;}
+@keyframes su{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+.empty{text-align:center;color:var(--text4);padding:36px 0;font-size:14px;line-height:2;}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--brown);color:#fff;padding:12px 28px;border-radius:30px;font-size:13px;font-weight:700;z-index:999;display:none;white-space:nowrap;}
+.toast.show{display:block;animation:tin .3s ease;}
+@keyframes tin{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ── 강사 뷰 ── -->
+<div id="instructor-view">
+  <div class="hdr">
+    <div class="hdr-eye">PILATES GUIDE YULIM.LEE</div>
+    <div class="hdr-title">상담 & 자세 평가 노트</div>
+    <div class="hdr-sub">강사 전용 · 초기 회원 관리</div>
+  </div>
+  <div class="nav">
+    <button class="nb on" onclick="go('consult')">📋 상담 입력</button>
+    <button class="nb" onclick="go('pending')" id="nb-pending">📨 대기 상담</button>
+    <button class="nb" onclick="go('list')">📂 회원 목록</button>
+  </div>
+  <div class="content">
+
+    <div id="t-consult">
+
+      <!-- 링크 공유 -->
+      <div class="card" style="background:var(--sage-bg);border-color:var(--sage-border)">
+        <div class="sec-title" style="color:var(--sage);margin-bottom:10px">🔗 신규 회원 상담지 링크</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:12px;line-height:1.7">회원이 직접 작성 후 제출하면<br>대기 상담 탭에 자동으로 나타나요.</div>
+        <div class="share-url-box" id="form-url">링크 생성 중...</div>
+        <div class="row" style="margin-bottom:12px">
+          <button class="btn-ghost" style="flex:1" onclick="copyFormUrl()">📋 링크 복사</button>
+          <button class="btn-ghost" style="flex:1" onclick="shareFormUrl()">💬 카카오 공유</button>
+        </div>
+        <div style="border-top:1px solid var(--sage-border);padding-top:12px">
+          <div style="font-size:11px;font-weight:700;color:var(--sage);margin-bottom:8px">📸 상담지 커버 사진 설정</div>
+          <div style="margin-bottom:8px"><span class="lbl">커버 사진 URL</span><input class="inp" id="cover-url" placeholder="https://." style="font-size:12px;" oninput="savePhotoUrls()"></div>
+          <div><span class="lbl">로고 사진 URL</span><input class="inp" id="logo-url" placeholder="https://." style="font-size:12px;" oninput="savePhotoUrls()"></div>
+        </div>
+      </div>
+
+      <!-- 1. 인적사항 -->
+      <div class="card">
+        <div class="sec-title">👤 인적사항</div>
+        <div class="mb10"><span class="lbl">이름 *</span><input class="inp" id="ev-name" placeholder="이름"></div>
+        <div class="row mb10">
+          <div style="flex:1.2"><span class="lbl">연락처</span><input class="inp" id="ev-phone" placeholder="010-0000-0000"></div>
+          <div style="flex:.8"><span class="lbl">나이</span><input type="number" class="inp" id="ev-age" placeholder="예) 35"></div>
+        </div>
+        <div class="row">
+          <div style="flex:1"><span class="lbl">상담 날짜</span><input type="date" class="inp" id="ev-date"></div>
+          <div style="flex:1"><span class="lbl">거주 지역</span><input class="inp" id="ev-region" placeholder="예) 마포구"></div>
+        </div>
+      </div>
+
+      <!-- 2. 지금 내 몸은 -->
+      <div class="card">
+        <div class="sec-title">🌿 지금 내 몸은</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:12px;line-height:1.9">불편한 곳, 잘 안 되는 동작,<br>평소 느끼는 것 — 무엇이든요.</div>
+        <textarea class="inp" id="ev-body" rows="5" placeholder="자유롭게 적어주세요."></textarea>
+      </div>
+
+      <!-- 3. 건강 특이사항 -->
+      <div class="card">
+        <div class="sec-title">🏥 건강 특이사항</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:14px;line-height:1.8">강사가 알면 좋을 건강 정보가 있다면 적어주세요.<br><span style="font-size:11px">수업을 더 안전하게 준비하기 위한 참고용이에요.</span></div>
+        <div class="mb10"><textarea class="inp" id="ev-health" rows="3" placeholder="예) 허리디스크 진단, 무릎 수술 이력, 임신 중."></textarea></div>
+        <div class="ci-full special" onclick="toggleCI('dx-pregnant',this,false)"><span class="ci-icon">🤰</span><span class="ci-text">임신 중</span></div>
+        <div class="ci-full special" onclick="toggleCI('dx-postpartum',this,false)"><span class="ci-icon">👶</span><span class="ci-text">출산 후 (산후 관리)</span></div>
+        <div class="ci-full" onclick="toggleCI('dx-surgery',this,false)"><span class="ci-icon">🔪</span><span class="ci-text">수술 이력 있음</span></div>
+      </div>
+
+
+      <!-- 4. 운동 목적 -->
+      <div class="card">
+        <div class="sec-title">🎯 운동 목적</div>
+        <div class="check-grid">
+          <div class="ci" onclick="toggleCI('goal-spine',this,false)"><span class="ci-icon">🦴</span><span class="ci-text">척추 건강 & 자세 개선</span></div>
+          <div class="ci" onclick="toggleCI('goal-sense',this,false)"><span class="ci-icon">🌀</span><span class="ci-text">내 몸 감각 깨우기</span></div>
+          <div class="ci" onclick="toggleCI('goal-breath',this,false)"><span class="ci-icon">🌬</span><span class="ci-text">호흡과 움직임 연결</span></div>
+          <div class="ci" onclick="toggleCI('goal-core',this,false)"><span class="ci-icon">💪</span><span class="ci-text">파워하우스 강화</span></div>
+          <div class="ci" onclick="toggleCI('goal-balance',this,false)"><span class="ci-icon">⚖️</span><span class="ci-text">좌우 불균형 개선</span></div>
+          <div class="ci" onclick="toggleCI('goal-daily',this,false)"><span class="ci-icon">🚶</span><span class="ci-text">일상 움직임이 편해지길</span></div>
+          <div class="ci" onclick="toggleCI('goal-energy',this,false)"><span class="ci-icon">✨</span><span class="ci-text">에너지와 활력 회복</span></div>
+          <div class="ci" onclick="toggleCI('goal-stress',this,false)"><span class="ci-icon">🍃</span><span class="ci-text">스트레스 해소 & 심신 안정</span></div>
+          <div class="ci" onclick="toggleCI('goal-weight',this,false)"><span class="ci-icon">🔥</span><span class="ci-text">체형 관리</span></div>
+          <div class="ci" onclick="toggleCI('goal-34',this,false)"><span class="ci-icon">🏆</span><span class="ci-text">34동작 완성 여정</span></div>
+        </div>
+        <div class="sub-title">운동 빈도 목표</div>
+        <div class="radio-grid">
+          <div class="radio-item" id="freq-1" onclick="setRadio('freq','1',false)"><span class="ci-text">주 1회</span></div>
+          <div class="radio-item" id="freq-2" onclick="setRadio('freq','2',false)"><span class="ci-text">주 2회</span></div>
+          <div class="radio-item" id="freq-3" onclick="setRadio('freq','3',false)"><span class="ci-text">주 3회 이상</span></div>
+          <div class="radio-item" id="freq-flex" onclick="setRadio('freq','flex',false)"><span class="ci-text">유동적으로</span></div>
+        </div>
+      </div>
+
+      <!-- 5. 하고 싶은 말 -->
+      <div class="card">
+        <div class="sec-title">💬 하고 싶은 말</div>
+        <textarea class="inp" id="ev-memo" rows="3" placeholder="강사에게 전하고 싶은 말을 자유롭게 적어주세요."></textarea>
+      </div>
+
+      <!-- 6. 자세 평가 (강사 전용) -->
+      <div class="card">
+        <div class="sec-title">📐 자세 평가 <span style="font-size:11px;color:var(--text3);font-weight:400">(강사 작성)</span></div>
+
+        <div class="sub-title">🦴 척추 만곡</div>
+        <div class="eval-item">
+          <div class="eval-item-name">전만곡 (Lordosis)</div>
+          <div class="eval-item-sub">요추 과전만 여부</div>
+          <div class="score-label"><span>심함</span><span>정상</span></div>
+          <div class="score-row" id="sc-lordosis">
+            <button class="score-btn s1" onclick="setScore('lordosis',1)">1</button><button class="score-btn s2" onclick="setScore('lordosis',2)">2</button><button class="score-btn s3" onclick="setScore('lordosis',3)">3</button><button class="score-btn s4" onclick="setScore('lordosis',4)">4</button><button class="score-btn s5" onclick="setScore('lordosis',5)">5</button>
+          </div>
+          <textarea class="eval-memo" id="memo-lordosis" rows="1" placeholder="메모."></textarea>
+        </div>
+        <div class="eval-item">
+          <div class="eval-item-name">후만곡 (Kyphosis)</div>
+          <div class="eval-item-sub">흉추 과후만 여부</div>
+          <div class="score-label"><span>심함</span><span>정상</span></div>
+          <div class="score-row" id="sc-kyphosis">
+            <button class="score-btn s1" onclick="setScore('kyphosis',1)">1</button><button class="score-btn s2" onclick="setScore('kyphosis',2)">2</button><button class="score-btn s3" onclick="setScore('kyphosis',3)">3</button><button class="score-btn s4" onclick="setScore('kyphosis',4)">4</button><button class="score-btn s5" onclick="setScore('kyphosis',5)">5</button>
+          </div>
+          <textarea class="eval-memo" id="memo-kyphosis" rows="1" placeholder="메모."></textarea>
+        </div>
+        <div class="eval-item">
+          <div class="eval-item-name">측만 (Scoliosis)</div>
+          <div class="score-label"><span>심함</span><span>정상</span></div>
+          <div class="score-row" id="sc-scoliosis">
+            <button class="score-btn s1" onclick="setScore('scoliosis',1)">1</button><button class="score-btn s2" onclick="setScore('scoliosis',2)">2</button><button class="score-btn s3" onclick="setScore('scoliosis',3)">3</button><button class="score-btn s4" onclick="setScore('scoliosis',4)">4</button><button class="score-btn s5" onclick="setScore('scoliosis',5)">5</button>
+          </div>
+          <div class="lr-row">
+            <button class="lr-btn" id="lr-scoliosis-L" onclick="setLR('scoliosis','L')">← 좌측</button>
+            <button class="lr-btn" id="lr-scoliosis-N" onclick="setLR('scoliosis','N')">정상</button>
+            <button class="lr-btn" id="lr-scoliosis-R" onclick="setLR('scoliosis','R')">우측 →</button>
+          </div>
+          <textarea class="eval-memo" id="memo-scoliosis" rows="1" placeholder="메모."></textarea>
+        </div>
+
+        <div class="sub-title">🦷 골반</div>
+        <div class="eval-item">
+          <div class="eval-item-name">골반 전방 경사</div>
+          <div class="score-label"><span>심함</span><span>정상</span></div>
+          <div class="score-row" id="sc-ant-tilt">
+            <button class="score-btn s1" onclick="setScore('ant-tilt',1)">1</button><button class="score-btn s2" onclick="setScore('ant-tilt',2)">2</button><button class="score-btn s3" onclick="setScore('ant-tilt',3)">3</button><button class="score-btn s4" onclick="setScore('ant-tilt',4)">4</button><button class="score-btn s5" onclick="setScore('ant-tilt',5)">5</button>
+          </div>
+          <textarea class="eval-memo" id="memo-ant-tilt" rows="1" placeholder="메모."></textarea>
+        </div>
+        <div class="eval-item">
+          <div class="eval-item-name">골반 후방 경사</div>
+          <div class="score-label"><span>심함</span><span>정상</span></div>
+          <div class="score-row" id="sc-post-tilt">
+            <button class="score-btn s1" onclick="setScore('post-tilt',1)">1</button><button class="score-btn s2" onclick="setScore('post-tilt',2)">2</button><button class="score-btn s3" onclick="setScore('post-tilt',3)">3</button><button class="score-btn s4" onclick="setScore('post-tilt',4)">4</button><button class="score-btn s5" onclick="setScore('post-tilt',5)">5</button>
+          </div>
+          <textarea class="eval-memo" id="memo-post-tilt" rows="1" placeholder="메모."></textarea>
+        </div>
+
+        <div class="sub-title">💪 어깨 · 머리</div>
+        <div class="eval-item">
+          <div class="eval-item-name">어깨 높이 차이</div>
+          <div class="score-label"><span>심함</span><span>정상</span></div>
+          <div class="score-row" id="sc-shoulder">
+            <button class="score-btn s1" onclick="setScore('shoulder',1)">1</button><button class="score-btn s2" onclick="setScore('shoulder',2)">2</button><button class="score-btn s3" onclick="setScore('shoulder',3)">3</button><button class="score-btn s4" onclick="setScore('shoulder',4)">4</button><button class="score-btn s5" onclick="setScore('shoulder',5)">5</button>
+          </div>
+          <div class="lr-row">
+            <button class="lr-btn" id="lr-shoulder-L" onclick="setLR('shoulder','L')">← 좌측 높음</button>
+            <button class="lr-btn" id="lr-shoulder-N" onclick="setLR('shoulder','N')">정상</button>
+            <button class="lr-btn" id="lr-shoulder-R" onclick="setLR('shoulder','R')">우측 높음 →</button>
+          </div>
+          <textarea class="eval-memo" id="memo-shoulder" rows="1" placeholder="메모."></textarea>
+        </div>
+        <div class="eval-item">
+          <div class="eval-item-name">머리 전방돌출 (FHP)</div>
+          <div class="score-label"><span>심함</span><span>정상</span></div>
+          <div class="score-row" id="sc-head">
+            <button class="score-btn s1" onclick="setScore('head',1)">1</button><button class="score-btn s2" onclick="setScore('head',2)">2</button><button class="score-btn s3" onclick="setScore('head',3)">3</button><button class="score-btn s4" onclick="setScore('head',4)">4</button><button class="score-btn s5" onclick="setScore('head',5)">5</button>
+          </div>
+          <textarea class="eval-memo" id="memo-head" rows="1" placeholder="메모."></textarea>
+        </div>
+
+        <div class="sub-title">🦵 하지</div>
+        <div class="eval-item">
+          <div class="eval-item-name">무릎 과신전</div>
+          <div class="score-label"><span>심함</span><span>정상</span></div>
+          <div class="score-row" id="sc-knee">
+            <button class="score-btn s1" onclick="setScore('knee',1)">1</button><button class="score-btn s2" onclick="setScore('knee',2)">2</button><button class="score-btn s3" onclick="setScore('knee',3)">3</button><button class="score-btn s4" onclick="setScore('knee',4)">4</button><button class="score-btn s5" onclick="setScore('knee',5)">5</button>
+          </div>
+          <div class="lr-row">
+            <button class="lr-btn" id="lr-knee-L" onclick="setLR('knee','L')">좌측</button>
+            <button class="lr-btn" id="lr-knee-B" onclick="setLR('knee','B')">양측</button>
+            <button class="lr-btn" id="lr-knee-R" onclick="setLR('knee','R')">우측</button>
+            <button class="lr-btn" id="lr-knee-N" onclick="setLR('knee','N')">정상</button>
+          </div>
+          <textarea class="eval-memo" id="memo-knee" rows="1" placeholder="메모."></textarea>
+        </div>
+        <div class="eval-item">
+          <div class="eval-item-name">발 외회전 (Toe-out)</div>
+          <div class="score-label"><span>심함</span><span>정상</span></div>
+          <div class="score-row" id="sc-foot">
+            <button class="score-btn s1" onclick="setScore('foot',1)">1</button><button class="score-btn s2" onclick="setScore('foot',2)">2</button><button class="score-btn s3" onclick="setScore('foot',3)">3</button><button class="score-btn s4" onclick="setScore('foot',4)">4</button><button class="score-btn s5" onclick="setScore('foot',5)">5</button>
+          </div>
+          <div class="lr-row">
+            <button class="lr-btn" id="lr-foot-L" onclick="setLR('foot','L')">좌측 심함</button>
+            <button class="lr-btn" id="lr-foot-B" onclick="setLR('foot','B')">양측</button>
+            <button class="lr-btn" id="lr-foot-R" onclick="setLR('foot','R')">우측 심함</button>
+            <button class="lr-btn" id="lr-foot-N" onclick="setLR('foot','N')">정상</button>
+          </div>
+          <textarea class="eval-memo" id="memo-foot" rows="1" placeholder="메모."></textarea>
+        </div>
+
+        <div class="sub-title">🌬 호흡</div>
+        <div class="eval-item">
+          <div class="eval-item-name">호흡 패턴</div>
+          <div class="score-label"><span>불량</span><span>양호</span></div>
+          <div class="score-row" id="sc-breath">
+            <button class="score-btn s1" onclick="setScore('breath',1)">1</button><button class="score-btn s2" onclick="setScore('breath',2)">2</button><button class="score-btn s3" onclick="setScore('breath',3)">3</button><button class="score-btn s4" onclick="setScore('breath',4)">4</button><button class="score-btn s5" onclick="setScore('breath',5)">5</button>
+          </div>
+          <textarea class="eval-memo" id="memo-breath" rows="2" placeholder="흉식 위주, 어깨 거상, 역호흡 등."></textarea>
+        </div>
+      </div>
+
+      <!-- 7. 종합 소견 -->
+      <div class="card">
+        <div class="sec-title">📝 종합 소견 & 첫 수업 방향</div>
+        <textarea class="inp" id="ev-overall" rows="4" placeholder="초기 평가 총평, 집중 부위, 주의사항."></textarea>
+      </div>
+      <button class="btn-brown" onclick="saveRecord()">✦ 상담 & 평가 저장</button>
+    </div>
+
+    <!-- 대기 상담 탭 -->
+    <div id="t-pending" class="hidden">
+      <div class="card" style="background:var(--yellow-bg);border-color:#e8d8a0">
+        <div class="sec-title" style="color:var(--yellow);margin-bottom:6px">📨 회원이 작성한 상담지</div>
+        <div style="font-size:12px;color:var(--text3)">선택하면 상담 입력 탭에 자동으로 불러와요.</div>
+      </div>
+      <div id="pending-body"><div class="empty">대기 중인 상담지가 없어요</div></div>
+    </div>
+
+    <!-- 회원 목록 탭 -->
+    <div id="t-list" class="hidden">
+      <div id="list-body"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── 회원 상담지 폼 ── -->
+<div id="form-view" class="hidden">
+  <!-- 커버 사진 -->
+  <div style="width:100%;height:220px;overflow:hidden;background:var(--bg2);">
+    <img id="form-cover-img" style="width:100%;height:100%;object-fit:cover;display:none;">
+  </div>
+  <!-- 헤더 -->
+  <div style="background:var(--brown);padding:24px 24px 20px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+      <img id="form-logo-img" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.3);background:#fff;padding:3px;display:none;flex-shrink:0;">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.28em;color:var(--brown-light)">PILATES GUIDE YULIM.LEE</div>
+    </div>
+    <div style="font-size:22px;font-weight:900;color:#fff;margin-bottom:6px;line-height:1.25">✍️ 상담지<br>나를 알아가는 첫 걸음</div>
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.15);">
+      <div style="font-size:13px;color:rgba(255,255,255,0.6);font-style:italic;letter-spacing:.02em">"움직임으로 돌아가는 것, 그것이 전부예요."</div>
+    </div>
+  </div>
+  <div class="content">
+
+    <!-- 1. 인적사항 -->
+    <div class="card">
+      <div class="sec-title">👤 인적사항</div>
+      <div class="mb10"><span class="lbl">이름 *</span><input class="inp" id="f-name" placeholder="이름을 입력해주세요."></div>
+      <div class="row mb10">
+        <div style="flex:1.2"><span class="lbl">연락처</span><input class="inp" id="f-phone" placeholder="010-0000-0000"></div>
+        <div style="flex:.8"><span class="lbl">나이</span><input type="number" class="inp" id="f-age" placeholder="예) 35"></div>
+      </div>
+      <div><span class="lbl">거주 지역</span><input class="inp" id="f-region" placeholder="예) 마포구"></div>
+    </div>
+
+    <!-- 2. 지금 내 몸은 -->
+    <div class="card">
+      <div class="sec-title">🌿 지금 내 몸은</div>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:14px;line-height:1.9">불편한 곳, 잘 안 되는 동작,<br>평소 느끼는 것 — 무엇이든요.</div>
+      <textarea class="inp" id="f-body" rows="5" placeholder="자유롭게 적어주세요."></textarea>
+    </div>
+
+    <!-- 3. 건강 특이사항 -->
+    <div class="card">
+      <div class="sec-title">🏥 건강 특이사항</div>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:14px;line-height:1.8">강사가 알면 좋을 건강 정보가 있다면 적어주세요.<br><span style="font-size:11px">수업을 더 안전하게 준비하기 위한 참고용이에요.</span></div>
+      <div class="mb10"><textarea class="inp" id="f-health" rows="3" placeholder="예) 허리디스크 진단, 무릎 수술 이력."></textarea></div>
+      <div class="ci-full special" onclick="toggleCI('dx-pregnant',this,true)"><span class="ci-icon">🤰</span><span class="ci-text">임신 중</span></div>
+      <div class="ci-full special" onclick="toggleCI('dx-postpartum',this,true)"><span class="ci-icon">👶</span><span class="ci-text">출산 후 (산후 관리)</span></div>
+      <div class="ci-full" onclick="toggleCI('dx-surgery',this,true)"><span class="ci-icon">🔪</span><span class="ci-text">수술 이력 있음</span></div>
+    </div>
+
+    <!-- 4. 운동 목적 -->
+    <div class="card">
+      <div class="sec-title">🎯 운동 목적</div>
+      <div class="check-grid">
+        <div class="ci" onclick="toggleCI('goal-spine',this,true)"><span class="ci-icon">🦴</span><span class="ci-text">척추 건강 & 자세 개선</span></div>
+        <div class="ci" onclick="toggleCI('goal-sense',this,true)"><span class="ci-icon">🌀</span><span class="ci-text">내 몸 감각 깨우기</span></div>
+        <div class="ci" onclick="toggleCI('goal-breath',this,true)"><span class="ci-icon">🌬</span><span class="ci-text">호흡과 움직임 연결</span></div>
+        <div class="ci" onclick="toggleCI('goal-core',this,true)"><span class="ci-icon">💪</span><span class="ci-text">파워하우스 강화</span></div>
+        <div class="ci" onclick="toggleCI('goal-balance',this,true)"><span class="ci-icon">⚖️</span><span class="ci-text">좌우 불균형 개선</span></div>
+        <div class="ci" onclick="toggleCI('goal-daily',this,true)"><span class="ci-icon">🚶</span><span class="ci-text">일상 움직임이 편해지길</span></div>
+        <div class="ci" onclick="toggleCI('goal-energy',this,true)"><span class="ci-icon">✨</span><span class="ci-text">에너지와 활력 회복</span></div>
+        <div class="ci" onclick="toggleCI('goal-stress',this,true)"><span class="ci-icon">🍃</span><span class="ci-text">스트레스 해소 & 심신 안정</span></div>
+        <div class="ci" onclick="toggleCI('goal-weight',this,true)"><span class="ci-icon">🔥</span><span class="ci-text">체형 관리</span></div>
+        <div class="ci" onclick="toggleCI('goal-34',this,true)"><span class="ci-icon">🏆</span><span class="ci-text">34동작 완성 여정</span></div>
+      </div>
+      <div class="sub-title">운동 빈도 목표</div>
+      <div class="radio-grid">
+        <div class="radio-item" id="f-freq-1" onclick="setRadio('freq','1',true)"><span class="ci-text">주 1회</span></div>
+        <div class="radio-item" id="f-freq-2" onclick="setRadio('freq','2',true)"><span class="ci-text">주 2회</span></div>
+        <div class="radio-item" id="f-freq-3" onclick="setRadio('freq','3',true)"><span class="ci-text">주 3회 이상</span></div>
+        <div class="radio-item" id="f-freq-flex" onclick="setRadio('freq','flex',true)"><span class="ci-text">유동적으로</span></div>
+      </div>
+    </div>
+
+    <!-- 5. 하고 싶은 말 -->
+    <div class="card">
+      <div class="sec-title">💬 하고 싶은 말</div>
+      <textarea class="inp" id="f-memo" rows="3" placeholder="강사에게 전하고 싶은 말을 자유롭게 적어주세요."></textarea>
+    </div>
+
+    <div id="f-submit-wrap">
+      <button class="btn-brown" onclick="submitForm()">✦ 상담지 제출하기</button>
+      <div style="font-size:11px;color:var(--text4);text-align:center;margin-top:10px;line-height:1.7">제출 후 강사에게 전달됩니다.<br>내용은 수업 준비에만 활용됩니다.</div>
+    </div>
+    <div id="f-success" class="hidden" style="padding:40px 20px;text-align:center">
+      <div style="font-size:44px;margin-bottom:14px">🌿</div>
+      <div style="font-size:18px;font-weight:800;color:var(--sage);margin-bottom:8px">상담지가 전달됐어요!</div>
+      <div style="font-size:13px;color:var(--text3);line-height:1.8">확인 후 순차적으로 연락드리겠습니다.<br>감사합니다 😊</div>
+    </div>
+  </div>
+</div>
+
+<!-- 상세 모달 -->
+<div class="modal-bg hidden" id="detail-modal" onclick="if(event.target===this)this.classList.add('hidden')">
+  <div class="modal">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div style="font-size:16px;font-weight:800;color:var(--brown)" id="dm-title"></div>
+      <button onclick="document.getElementById('detail-modal').classList.add('hidden')" style="background:none;border:none;font-size:20px;color:var(--text3);cursor:pointer">✕</button>
+    </div>
+    <div id="dm-content"></div>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn-ghost" style="flex:1" onclick="document.getElementById('detail-modal').classList.add('hidden')">닫기</button>
+      <button class="btn-danger" style="flex:1" id="dm-delete-btn">🗑 삭제</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const SB_URL="https://phbdaxipaenyphwrebjz.supabase.co";
+const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBoYmRheGlwYWVueXBod3JlYmp6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5NTA4MTAsImV4cCI6MjA5MDUyNjgxMH0.ScVK7ckOjTS-umOUstlo-CgQAWJ5NpYXoSBrluxqvNM";
+const H={"Content-Type":"application/json","apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY};
+async function sb(method,table,body=null,query=""){
+  const res=await fetch(`${SB_URL}/rest/v1/${table}${query}`,{method,headers:{...H,"Prefer":method==="POST"?"return=representation":""},body:body?JSON.stringify(body):null});
+  if(!res.ok){const e=await res.text();throw new Error(e);}
+  return res.status===204?null:res.json();
+}
+
+const FIXED_COVER_URL="https://raw.githubusercontent.com/byulpilates/posture/main/Black%20White%20Simple%20Light%20Food%20QR%20Code%20Business%20Card%20-%207.JPG";
+const FIXED_LOGO_URL="https://raw.githubusercontent.com/byulpilates/posture/main/15.png";
+
+const EVAL_ITEMS=[
+  {id:"lordosis", name:"전만곡",      lrOpts:null},
+  {id:"kyphosis", name:"후만곡",      lrOpts:null},
+  {id:"scoliosis",name:"측만",        lrOpts:["L","N","R"]},
+  {id:"ant-tilt", name:"골반 전방경사",lrOpts:null},
+  {id:"post-tilt",name:"골반 후방경사",lrOpts:null},
+  {id:"shoulder", name:"어깨 높이차이",lrOpts:["L","N","R"]},
+  {id:"head",     name:"머리 전방돌출",lrOpts:null},
+  {id:"knee",     name:"무릎 과신전",  lrOpts:["L","B","R","N"]},
+  {id:"foot",     name:"발 외회전",    lrOpts:["L","B","R","N"]},
+  {id:"breath",   name:"호흡 패턴",    lrOpts:null},
+];
+const GOAL_MAP={'goal-spine':'척추 건강 & 자세 개선','goal-sense':'내 몸 감각 깨우기','goal-breath':'호흡과 움직임 연결','goal-core':'파워하우스 강화','goal-balance':'좌우 불균형 개선','goal-daily':'일상 움직임이 편해지길','goal-energy':'에너지와 활력 회복','goal-stress':'스트레스 해소 & 심신 안정','goal-weight':'체형 관리','goal-34':'34동작 완성 여정'};
+const FREQ_MAP={'1':'주 1회','2':'주 2회','3':'주 3회 이상','flex':'유동적으로'};
+const LR_MAP={L:"좌측",R:"우측",B:"양측",N:"정상"};
+
+let checks={},radios={},scores={},lrs={};
+let formChecks={},formRadios={};
+let records=[],pendingForms=[];
+
+function uid(){return"r"+Date.now()+Math.random().toString(36).slice(2,6);}
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2400);}
+function fmt(d){if(!d)return"";return new Date(d).toLocaleDateString("ko-KR",{year:"numeric",month:"long",day:"numeric"});}
+function fmtTime(d){if(!d)return"";return new Date(d).toLocaleString("ko-KR",{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"});}
+function getGrade(avg){
+  if(avg>=4.5)return{text:"매우 양호",cls:"score-high"};if(avg>=3.5)return{text:"양호",cls:"score-high"};
+  if(avg>=2.5)return{text:"보통",cls:"score-mid"};if(avg>=1.5)return{text:"주의",cls:"score-low"};
+  return{text:"집중 필요",cls:"score-low"};
+}
+function calcAvg(){const v=Object.values(scores).filter(x=>x>0);if(!v.length)return 0;return Math.round(v.reduce((a,b)=>a+b,0)/EVAL_ITEMS.length*10)/10;}
+
+function toggleCI(id,el,isForm){const c=isForm?formChecks:checks;c[id]=!c[id];el.classList.toggle("on",c[id]);}
+function setRadio(group,val,isForm){
+  const r=isForm?formRadios:radios;r[group]=val;
+  const p=isForm?"f-":"";
+  if(group==="freq"){["1","2","3","flex"].forEach(s=>{document.getElementById(p+"freq-"+s)?.classList.toggle("on",val===s);});}
+}
+function setScore(id,val){scores[id]=val;document.getElementById("sc-"+id).querySelectorAll(".score-btn").forEach((b,i)=>b.classList.toggle("on",i+1===val));}
+function setLR(id,val){lrs[id]=val;const item=EVAL_ITEMS.find(x=>x.id===id);(item?.lrOpts||[]).forEach(opt=>{const el=document.getElementById(`lr-${id}-${opt}`);if(el)el.classList.toggle("on",opt===val);});}
+
+function savePhotoUrls(){
+  const cu=document.getElementById("cover-url")?.value.trim();
+  const lu=document.getElementById("logo-url")?.value.trim();
+  if(cu)localStorage.setItem("cover_url",cu);
+  if(lu)localStorage.setItem("logo_url",lu);
+  applyFormPhotos();
+}
+
+function applyFormPhotos(){
+  const coverUrl=localStorage.getItem("cover_url")||FIXED_COVER_URL;
+  const logoUrl=localStorage.getItem("logo_url")||FIXED_LOGO_URL;
+  // 강사 뷰 input 복원
+  if(document.getElementById("cover-url"))document.getElementById("cover-url").value=coverUrl;
+  if(document.getElementById("logo-url"))document.getElementById("logo-url").value=logoUrl;
+  // 회원 폼 적용
+  const ci=document.getElementById("form-cover-img"),li=document.getElementById("form-logo-img");
+  if(ci&&coverUrl){ci.src=coverUrl;ci.style.display="block";ci.onerror=()=>{ci.style.display="none";};}
+  if(li&&logoUrl){li.src=logoUrl;li.style.display="block";li.onerror=()=>{li.style.display="none";};}
+}
+
+function subscribeToNewForms(){
+  try{
+    const ws=new WebSocket(`wss://phbdaxipaenyphwrebjz.supabase.co/realtime/v1/websocket?apikey=${SB_KEY}&vsn=1.0.0`);
+    ws.onopen=()=>ws.send(JSON.stringify({topic:"realtime:public:health_forms",event:"phx_join",payload:{},ref:"1"}));
+    ws.onmessage=(e)=>{try{const msg=JSON.parse(e.data);if(msg.event==="INSERT"&&msg.payload?.record?.status==="pending"){const rec=msg.payload.record;pendingForms.unshift(rec);updateBadge();showNewFormToast(rec.name);if(Notification.permission==="granted")new Notification("📨 새 상담지 도착!",{body:`${rec.name}님이 상담지를 제출했어요 🌿`});}}catch(err){}};
+  }catch(e){}
+}
+function showNewFormToast(name){
+  const t=document.getElementById("toast");
+  t.innerHTML=`📨 <strong>${name}</strong>님의 상담지가 도착했어요!`;
+  t.style.background="var(--yellow)";t.style.cursor="pointer";
+  t.onclick=()=>{go("pending");t.classList.remove("show");t.style.background="";t.style.cursor="";t.onclick=null;};
+  t.classList.add("show");setTimeout(()=>{t.classList.remove("show");t.style.background="";t.style.cursor="";t.onclick=null;},6000);
+}
+
+window.addEventListener("DOMContentLoaded",async()=>{
+  if(new URLSearchParams(location.search).get("form")==="1"){showFormView();return;}
+  document.getElementById("ev-date").value=new Date().toISOString().split("T")[0];
+  document.getElementById("form-url").textContent=location.href.split("?")[0]+"?form=1";
+  applyFormPhotos();
+  loadLocal();await loadPending();subscribeToNewForms();
+  if(Notification.permission==="default"){setTimeout(()=>{if(confirm("새 상담지가 도착하면 알림으로 알려드릴까요?"))Notification.requestPermission();},2000);}
+});
+
+function loadLocal(){try{records=JSON.parse(localStorage.getItem("consult_v2")||"[]");}catch{records=[];}}
+function saveLocal(){localStorage.setItem("consult_v2",JSON.stringify(records));}
+async function loadPending(){
+  try{const d=await sb("GET","health_forms","","?status=eq.pending&order=created_at.desc");pendingForms=d||[];updateBadge();}catch(e){console.error(e);}
+}
+function updateBadge(){document.getElementById("nb-pending").textContent=pendingForms.length>0?`📨 대기 상담 (${pendingForms.length})`:"📨 대기 상담";}
+
+function go(tab){
+  ["consult","pending","list"].forEach(t=>document.getElementById("t-"+t).classList.toggle("hidden",t!==tab));
+  document.querySelectorAll(".nb").forEach((b,i)=>b.classList.toggle("on",["consult","pending","list"][i]===tab));
+  if(tab==="list")renderList();if(tab==="pending")renderPending();
+}
+function copyFormUrl(){navigator.clipboard.writeText(document.getElementById("form-url").textContent).then(()=>toast("✓ 링크 복사 완료!")).catch(()=>toast("링크를 직접 복사해주세요"));}
+function shareFormUrl(){window.open(`https://story.kakao.com/share?url=${encodeURIComponent(document.getElementById("form-url").textContent)}`,"_blank","width=500,height=400");}
+
+function renderPending(){
+  const body=document.getElementById("pending-body");
+  if(!pendingForms.length){body.innerHTML=`<div class="empty">대기 중인 상담지가 없어요</div>`;return;}
+  body.innerHTML=pendingForms.map(f=>`
+    <div class="pending-card">
+      <div class="pending-badge">NEW · 대기 중</div>
+      <div style="font-size:15px;font-weight:700;color:var(--brown);margin-bottom:3px">${f.name}${f.age?` · ${f.age}세`:""}</div>
+      ${f.phone?`<div style="font-size:12px;color:var(--text3);margin-bottom:3px">📞 ${f.phone}</div>`:""}
+      <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text4);margin-bottom:10px">${fmtTime(f.created_at)} 제출</div>
+      ${f.body_text?`<div style="font-size:12px;color:var(--text2);background:white;padding:10px 12px;border-radius:10px;margin-bottom:10px;line-height:1.7;border:1px solid var(--border)">🌿 "${f.body_text}"</div>`:""}
+      <button class="btn-brown" onclick="loadToConsult('${f.id}')">📋 상담 탭으로 불러오기</button>
+    </div>`).join("");
+}
+
+async function loadToConsult(fid){
+  const f=pendingForms.find(x=>x.id===fid);if(!f)return;
+  go("consult");
+  document.getElementById("ev-name").value=f.name||"";
+  document.getElementById("ev-phone").value=f.phone||"";
+  document.getElementById("ev-age").value=f.age||"";
+  document.getElementById("ev-region").value=f.region||"";
+  document.getElementById("ev-body").value=f.body_text||"";
+  document.getElementById("ev-health").value=f.health||"";
+  document.getElementById("ev-memo").value=f.memo||"";
+  checks={...(f.checks||{})};radios={...(f.radios||{})};
+  // 체크 반영
+  document.querySelectorAll("#t-consult .ci,.ci-full").forEach(el=>{
+    const m=el.getAttribute("onclick")?.match(/toggleCI\('([^']+)'/);
+    if(m&&checks[m[1]])el.classList.add("on");
+  });
+  if(radios.freq)setRadio("freq",radios.freq,false);
+  try{await sb("PATCH","health_forms",{status:"done"},`?id=eq.${fid}`);pendingForms=pendingForms.filter(x=>x.id!==fid);updateBadge();}catch(e){}
+  toast("✓ 상담지를 불러왔어요!");window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function saveRecord(){
+  const name=document.getElementById("ev-name").value.trim();
+  if(!name){toast("⚠ 이름을 입력해주세요");return;}
+  const memos={};EVAL_ITEMS.forEach(item=>{const el=document.getElementById("memo-"+item.id);if(el&&el.value.trim())memos[item.id]=el.value.trim();});
+  const rec={id:uid(),name,phone:document.getElementById("ev-phone").value.trim(),date:document.getElementById("ev-date").value,age:document.getElementById("ev-age").value||"",region:document.getElementById("ev-region").value.trim(),bodyText:document.getElementById("ev-body").value.trim(),health:document.getElementById("ev-health").value.trim(),memo:document.getElementById("ev-memo").value.trim(),overall:document.getElementById("ev-overall").value.trim(),checks:{...checks},radios:{...radios},scores:{...scores},lrs:{...lrs},memos,avg:calcAvg(),createdAt:new Date().toISOString()};
+  records.unshift(rec);saveLocal();
+  checks={};radios={};scores={};lrs={};
+  ["ev-name","ev-phone","ev-age","ev-region","ev-body","ev-health","ev-memo","ev-overall"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+  document.getElementById("ev-date").value=new Date().toISOString().split("T")[0];
+  document.querySelectorAll("#t-consult .ci.on,.ci-full.on,.radio-item.on").forEach(el=>el.classList.remove("on"));
+  EVAL_ITEMS.forEach(item=>{document.getElementById("sc-"+item.id)?.querySelectorAll(".score-btn").forEach(b=>b.classList.remove("on"));const m=document.getElementById("memo-"+item.id);if(m)m.value="";(item.lrOpts||[]).forEach(opt=>{const el=document.getElementById(`lr-${item.id}-${opt}`);if(el)el.classList.remove("on");});});
+  toast("✦ 상담 & 평가가 저장됐어요");go("list");
+}
+
+function renderList(){
+  const body=document.getElementById("list-body");
+  if(!records.length){body.innerHTML=`<div class="empty">아직 상담 기록이 없어요</div>`;return;}
+  body.innerHTML=records.map(r=>{
+    const grade=getGrade(r.avg);
+    const goalList=Object.entries(r.checks||{}).filter(([k,v])=>v&&k.startsWith("goal-")).map(([k])=>GOAL_MAP[k]||k).slice(0,3);
+    return`<div class="record-card" onclick="openDetail('${r.id}')">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+        <div><div style="font-size:15px;font-weight:700;color:var(--brown)">${r.name}${r.age?` · ${r.age}세`:""}</div>${r.phone?`<div style="font-size:11px;color:var(--text3)">📞 ${r.phone}</div>`:""}<div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text4)">${fmt(r.date)}</div></div>
+        ${r.avg>0?`<div style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px" class="${grade.cls}">자세 ${r.avg}점</div>`:`<div style="font-size:11px;color:var(--text4)">자세평가 없음</div>`}
+      </div>
+      ${r.bodyText?`<div style="font-size:12px;color:var(--text2);padding:8px 11px;background:var(--bg);border-radius:9px;margin-bottom:7px;border:1px solid var(--border);line-height:1.6">🌿 "${r.bodyText.length>60?r.bodyText.slice(0,60)+"...":r.bodyText}"</div>`:""}
+      ${goalList.length?`<div style="display:flex;flex-wrap:wrap;gap:3px">${goalList.map(g=>`<span class="goal-tag">${g}</span>`).join("")}</div>`:""}
+    </div>`;
+  }).join("");
+}
+
+function openDetail(id){
+  const r=records.find(x=>x.id===id);if(!r)return;
+  const grade=getGrade(r.avg);
+  const goalList=Object.entries(r.checks||{}).filter(([k,v])=>v&&k.startsWith("goal-")).map(([k])=>GOAL_MAP[k]||k);
+  const dxList=Object.entries(r.checks||{}).filter(([k,v])=>v&&k.startsWith("dx-")).map(([k])=>{const m={'dx-pregnant':'임신 중','dx-postpartum':'출산 후','dx-surgery':'수술 이력'};return m[k]||k.replace("dx-","");});
+  document.getElementById("dm-title").textContent=r.name+(r.age?` · ${r.age}세`:"");
+  let html=`<div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text3);margin-bottom:12px">${fmt(r.date)}${r.phone?` · ${r.phone}`:""}</div>`;
+  // 지금 내 몸은
+  if(r.bodyText)html+=`<div style="background:var(--sage-bg);border:1px solid var(--sage-border);border-radius:12px;padding:14px;margin-bottom:12px"><div style="font-size:12px;font-weight:700;color:var(--sage);margin-bottom:7px">🌿 지금 내 몸은</div><div style="font-size:13px;color:var(--text);line-height:1.8">${r.bodyText}</div></div>`;
+  // 운동 목적
+  if(goalList.length||r.radios?.freq)html+=`<div style="margin-bottom:12px"><div style="font-size:12px;font-weight:700;color:var(--text3);margin-bottom:6px">🎯 운동 목적</div><div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:${r.radios?.freq?"6px":"0"}">${goalList.map(g=>`<span class="goal-tag">${g}</span>`).join("")}</div>${r.radios?.freq?`<div style="font-size:12px;color:var(--sage);margin-top:4px">📅 ${FREQ_MAP[r.radios.freq]}</div>`:""}</div>`;
+  // 건강 특이사항
+  if(r.health||dxList.length)html+=`<div style="margin-bottom:12px"><div style="font-size:12px;font-weight:700;color:var(--text3);margin-bottom:6px">🏥 건강 특이사항</div>${dxList.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:${r.health?"6px":"0"}">${dxList.map(d=>`<span style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;background:var(--yellow-bg);color:var(--yellow);border:1px solid #e8d8a0;font-weight:600">${d}</span>`).join("")}</div>`:""} ${r.health?`<div style="font-size:13px;color:var(--text);padding:10px 12px;background:var(--bg);border-radius:9px;border:1px solid var(--border);line-height:1.7">${r.health}</div>`:""}</div>`;
+  // 자세 평가
+  if(r.avg>0){
+    html+=`<div class="total-score" style="margin-bottom:12px"><div class="total-score-num">${r.avg}</div><div style="font-size:13px;opacity:.7;margin-top:4px">/ 5.0 평균</div><div class="total-score-grade ${grade.cls}">${grade.text}</div></div>`;
+    EVAL_ITEMS.filter(item=>r.scores?.[item.id]).forEach(item=>{
+      const s=r.scores[item.id],lr=r.lrs?.[item.id],memo=r.memos?.[item.id]||"";
+      html+=`<div style="background:var(--bg);border-radius:9px;padding:9px 12px;margin-bottom:5px;border:1px solid var(--border)"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:12px;font-weight:600">${item.name}${lr?` (${LR_MAP[lr]||lr})`:""}</span><span style="font-size:12px;font-weight:700;color:var(--brown)">${s}점</span></div><div style="display:flex;gap:3px;margin-bottom:${memo?"4px":"0"}">${[1,2,3,4,5].map(i=>`<div style="flex:1;height:5px;border-radius:3px;background:${i<=s?"var(--brown-light)":"var(--border)"}"></div>`).join("")}</div>${memo?`<div style="font-size:11px;color:var(--text3)">${memo}</div>`:""}</div>`;
+    });
+  }
+  if(r.overall)html+=`<div style="margin-top:10px"><div style="font-size:12px;font-weight:700;color:var(--text3);margin-bottom:6px">종합 소견</div><div style="background:var(--sage-bg);border:1px solid var(--sage-border);border-radius:10px;padding:12px;font-size:13px;line-height:1.7">${r.overall}</div></div>`;
+  if(r.memo)html+=`<div style="margin-top:10px;padding:10px 12px;background:var(--bg2);border-radius:10px;font-size:12px;color:var(--text2);line-height:1.6">💬 "${r.memo}"</div>`;
+  document.getElementById("dm-content").innerHTML=html;
+  document.getElementById("dm-delete-btn").onclick=()=>{if(!confirm(`"${r.name}" 기록을 삭제할까요?`))return;records=records.filter(x=>x.id!==id);saveLocal();document.getElementById("detail-modal").classList.add("hidden");renderList();toast("🗑 삭제됐어요");};
+  document.getElementById("detail-modal").classList.remove("hidden");
+}
+
+function showFormView(){
+  document.getElementById("instructor-view").classList.add("hidden");
+  document.getElementById("form-view").classList.remove("hidden");
+  applyFormPhotos();
+}
+
+async function submitForm(){
+  const name=document.getElementById("f-name").value.trim();
+  if(!name){toast("⚠ 이름을 입력해주세요");return;}
+  const btn=document.querySelector("#f-submit-wrap .btn-brown");
+  btn.disabled=true;btn.textContent="제출 중...";
+  try{
+    await sb("POST","health_forms",{
+      id:uid(),name,
+      phone:document.getElementById("f-phone").value.trim()||null,
+      age:document.getElementById("f-age").value||null,
+      region:document.getElementById("f-region").value.trim()||null,
+      body_text:document.getElementById("f-body").value.trim()||null,
+      health:document.getElementById("f-health").value.trim()||null,
+      memo:document.getElementById("f-memo").value.trim()||null,
+      checks:{...formChecks},radios:{...formRadios},
+      status:"pending"
+    });
+    document.getElementById("f-submit-wrap").classList.add("hidden");
+    document.getElementById("f-success").classList.remove("hidden");
+  }catch(e){toast("제출 실패: "+e.message);btn.disabled=false;btn.textContent="✦ 상담지 제출하기";}
+}
+</script>
+</body>
+</html>
