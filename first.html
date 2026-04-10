@@ -557,11 +557,33 @@ window.addEventListener("DOMContentLoaded",async()=>{
   document.getElementById("ev-date").value=new Date().toISOString().split("T")[0];
   document.getElementById("form-url").textContent=location.href.split("?")[0]+"?form=1";
   applyFormPhotos();
-  loadLocal();await loadPending();subscribeToNewForms();
+  loadLocal();await loadFromSupabase();await loadPending();subscribeToNewForms();
   if(Notification.permission==="default"){setTimeout(()=>{if(confirm("새 상담지가 도착하면 알림으로 알려드릴까요?"))Notification.requestPermission();},2000);}
 });
 
 function loadLocal(){try{records=JSON.parse(localStorage.getItem("consult_v2")||"[]");}catch{records=[];}}
+async function loadFromSupabase(){
+  try{
+    const data=await sb("GET","posture_records","","?order=created_at.desc");
+    if(data&&data.length>0){
+      // Supabase 데이터를 로컬 형식으로 변환
+      const sbRecords=data.map(r=>({
+        id:r.id, name:r.name, phone:r.phone||"", age:r.age||"",
+        region:r.region||"", date:r.date, bodyText:r.body_text||"",
+        health:r.health||"", memo:r.memo||"", overall:r.overall||"",
+        checks:r.checks||{}, radios:r.radios||{}, scores:r.scores||{},
+        lrs:r.lrs||{}, memos:r.memos||{}, avg:r.avg||0,
+        createdAt:r.created_at
+      }));
+      // 로컬과 합치되 중복 제거
+      const localIds=new Set(records.map(r=>r.id));
+      const merged=[...records, ...sbRecords.filter(r=>!localIds.has(r.id))];
+      merged.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+      records=merged;
+      saveLocal();
+    }
+  }catch(e){console.error("Supabase 불러오기 실패:",e);}
+}
 function saveLocal(){localStorage.setItem("consult_v2",JSON.stringify(records));}
 async function loadPending(){
   try{const d=await sb("GET","health_forms","","?status=eq.pending&order=created_at.desc");pendingForms=d||[];updateBadge();}catch(e){console.error(e);}
@@ -611,11 +633,21 @@ async function loadToConsult(fid){
   toast("✓ 상담지를 불러왔어요!");window.scrollTo({top:0,behavior:"smooth"});
 }
 
-function saveRecord(){
+async function saveRecord(){
   const name=document.getElementById("ev-name").value.trim();
   if(!name){toast("⚠ 이름을 입력해주세요");return;}
   const memos={};EVAL_ITEMS.forEach(item=>{const el=document.getElementById("memo-"+item.id);if(el&&el.value.trim())memos[item.id]=el.value.trim();});
   const rec={id:uid(),name,phone:document.getElementById("ev-phone").value.trim(),date:document.getElementById("ev-date").value,age:document.getElementById("ev-age").value||"",region:document.getElementById("ev-region").value.trim(),bodyText:document.getElementById("ev-body").value.trim(),health:document.getElementById("ev-health").value.trim(),memo:document.getElementById("ev-memo").value.trim(),overall:document.getElementById("ev-overall").value.trim(),checks:{...checks},radios:{...radios},scores:{...scores},lrs:{...lrs},memos,avg:calcAvg(),createdAt:new Date().toISOString()};
+  // Supabase 저장
+  try {
+    await sb("POST","posture_records",{
+      id:rec.id, name:rec.name, phone:rec.phone||null, age:rec.age||null,
+      region:rec.region||null, date:rec.date, body_text:rec.bodyText||null,
+      health:rec.health||null, memo:rec.memo||null, overall:rec.overall||null,
+      checks:rec.checks, radios:rec.radios, scores:rec.scores,
+      lrs:rec.lrs, memos:rec.memos, avg:rec.avg
+    });
+  } catch(e) { console.error("Supabase 저장 실패:", e); }
   records.unshift(rec);saveLocal();
   checks={};radios={};scores={};lrs={};
   ["ev-name","ev-phone","ev-age","ev-region","ev-body","ev-health","ev-memo","ev-overall"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
