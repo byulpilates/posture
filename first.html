@@ -426,11 +426,9 @@ window.addEventListener("DOMContentLoaded",async()=>{
   subscribeToNewForms();
   // SW에 주기적으로 체크 메시지 (30초마다)
   if('serviceWorker' in navigator){
-    setInterval(()=>{
-      navigator.serviceWorker.ready.then(reg=>{
-        reg.active?.postMessage('CHECK_PENDING');
-      });
-    }, 30000);
+    navigator.serviceWorker.ready.then(reg=>{
+      reg.active?.postMessage('START_REALTIME');
+    });
   }
   // 알림 버튼 상태 업데이트
   updateNotifBtn();
