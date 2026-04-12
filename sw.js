@@ -1,28 +1,9 @@
-const CACHE_NAME = 'pilates-v1';
+const CACHE_NAME = 'pilates-v2';
+const SB_URL = 'https://phbdaxipaenyphwrebjz.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBoYmRheGlwYWVueXBod3JlYmp6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5NTA4MTAsImV4cCI6MjA5MDUyNjgxMH0.ScVK7ckOjTS-umOUstlo-CgQAWJ5NpYXoSBrluxqvNM';
 
-self.addEventListener('install', e => {
-  self.skipWaiting();
-});
-
-self.addEventListener('activate', e => {
-  e.waitUntil(clients.claim());
-});
-
-// 푸시 알림 수신
-self.addEventListener('push', e => {
-  const data = e.data ? e.data.json() : {};
-  const title = data.title || '📨 새 상담지 도착!';
-  const body = data.body || '새 상담지가 제출됐어요 🌿';
-  e.waitUntil(
-    self.registration.showNotification(title, {
-      body,
-      icon: 'https://raw.githubusercontent.com/byulpilates/posture/main/15.png',
-      badge: 'https://raw.githubusercontent.com/byulpilates/posture/main/15.png',
-      tag: 'new-consult',
-      renotify: true,
-    })
-  );
-});
+self.addEventListener('install', e => { self.skipWaiting(); });
+self.addEventListener('activate', e => { e.waitUntil(clients.claim()); });
 
 // 알림 클릭 시 앱 열기
 self.addEventListener('notificationclick', e => {
@@ -30,7 +11,7 @@ self.addEventListener('notificationclick', e => {
   e.waitUntil(
     clients.matchAll({type:'window'}).then(list => {
       for (const client of list) {
-        if (client.url.includes('posture') && 'focus' in client) {
+        if (client.url.includes('posture') || client.url.includes('first')) {
           return client.focus();
         }
       }
@@ -39,45 +20,92 @@ self.addEventListener('notificationclick', e => {
   );
 });
 
-// Supabase Realtime 폴링 (백그라운드)
+// 메인 앱에서 메시지 수신
 self.addEventListener('message', e => {
+  if (e.data === 'START_REALTIME') startRealtime();
   if (e.data === 'CHECK_PENDING') checkPending();
 });
 
+// Supabase Realtime WebSocket 연결
+let ws = null;
+let wsRetryTimer = null;
+
+function startRealtime() {
+  if (ws && ws.readyState === WebSocket.OPEN) return;
+  connectWS();
+}
+
+function connectWS() {
+  try {
+    ws = new WebSocket(
+      `wss://${SB_URL.replace('https://', '')}/realtime/v1/websocket?apikey=${SB_KEY}&vsn=1.0.0`
+    );
+    ws.onopen = () => {
+      ws.send(JSON.stringify({
+        topic: 'realtime:public:health_forms',
+        event: 'phx_join',
+        payload: {},
+        ref: '1'
+      }));
+      // 하트비트 (30초마다)
+      setInterval(() => {
+        if (ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({topic:'phoenix',event:'heartbeat',payload:{},ref:'hb'}));
+        }
+      }, 30000);
+    };
+    ws.onmessage = async (e) => {
+      try {
+        const msg = JSON.parse(e.data);
+        if (msg.event === 'INSERT' && msg.payload?.record) {
+          const rec = msg.payload.record;
+          if (rec.status === 'pending') {
+            await showNotification(rec.name);
+          }
+        }
+      } catch(err) {}
+    };
+    ws.onclose = () => {
+      // 연결 끊기면 5초 후 재연결
+      wsRetryTimer = setTimeout(connectWS, 5000);
+    };
+    ws.onerror = () => { ws.close(); };
+  } catch(e) {}
+}
+
+// 알림 표시
+async function showNotification(name) {
+  const cache = await caches.open(CACHE_NAME);
+  self.registration.showNotification('📨 새 상담지 도착!', {
+    body: `${name}님이 상담지를 제출했어요 🌿`,
+    icon: 'https://raw.githubusercontent.com/byulpilates/posture/main/15.png',
+    badge: 'https://raw.githubusercontent.com/byulpilates/posture/main/15.png',
+    tag: 'new-consult',
+    renotify: true,
+    requireInteraction: false,
+  });
+}
+
+// 폴링 방식 (백업 - 앱 열릴 때)
 async function checkPending() {
   try {
     const res = await fetch(
-      'https://phbdaxipaenyphwrebjz.supabase.co/rest/v1/health_forms?status=eq.pending&order=created_at.desc&limit=1',
-      {
-        headers: {
-          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBoYmRheGlwYWVueXBod3JlYmp6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5NTA4MTAsImV4cCI6MjA5MDUyNjgxMH0.ScVK7ckOjTS-umOUstlo-CgQAWJ5NpYXoSBrluxqvNM',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBoYmRheGlwYWVueXBod3JlYmp6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5NTA4MTAsImV4cCI6MjA5MDUyNjgxMH0.ScVK7ckOjTS-umOUstlo-CgQAWJ5NpYXoSBrluxqvNM'
-        }
-      }
+      `${SB_URL}/rest/v1/health_forms?status=eq.pending&order=created_at.desc&limit=1`,
+      { headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` } }
     );
     const data = await res.json();
     if (data && data.length > 0) {
       const latest = data[0];
-      // 마지막으로 알림 보낸 id 확인
       const cache = await caches.open(CACHE_NAME);
       const lastRes = await cache.match('last-notified-id');
       const lastId = lastRes ? await lastRes.text() : '';
       if (latest.id !== lastId) {
         await cache.put('last-notified-id', new Response(latest.id));
-        self.registration.showNotification('📨 새 상담지 도착!', {
-          body: `${latest.name}님이 상담지를 제출했어요 🌿`,
-          icon: 'https://raw.githubusercontent.com/byulpilates/posture/main/15.png',
-          tag: 'new-consult',
-          renotify: true,
-        });
+        await showNotification(latest.name);
       }
     }
   } catch(e) {}
 }
 
-// 백그라운드 주기적 체크 (1분마다)
-self.addEventListener('periodicsync', e => {
-  if (e.tag === 'check-pending') {
-    e.waitUntil(checkPending());
-  }
-});
+// SW 시작하자마자 Realtime 연결
+connectWS();
