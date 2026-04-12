@@ -159,8 +159,8 @@ textarea.inp{resize:none;}
         <div class="sec-title">👤 인적사항</div>
         <div class="mb10"><span class="lbl">이름 *</span><input class="inp" id="ev-name" placeholder="이름"></div>
         <div class="row mb10">
-          <div style="flex:1.2"><span class="lbl">연락처</span><input class="inp" id="ev-phone" placeholder="010-0000-0000" inputmode="tel"></div>
-          <div style="flex:.8"><span class="lbl">나이</span><input type="number" class="inp" id="ev-age" placeholder="예) 35" inputmode="numeric"></div>
+          <div style="flex:1.2"><span class="lbl">연락처</span><input class="inp" type="tel" id="ev-phone" placeholder="010-0000-0000" inputmode="tel"></div>
+          <div style="flex:.8"><span class="lbl">나이</span><input type="number" class="inp" id="ev-age" placeholder="예) 35" inputmode="numeric" pattern="[0-9]*"></div>
         </div>
         <div class="row">
           <div style="flex:1"><span class="lbl">상담 날짜</span><input type="date" class="inp" id="ev-date"></div>
@@ -219,8 +219,8 @@ textarea.inp{resize:none;}
       <div class="sec-title">&#128100; 인적사항</div>
       <div class="mb10"><span class="lbl">이름 *</span><input class="inp" id="f-name" placeholder="이름을 입력해주세요."></div>
       <div class="row mb10">
-        <div style="flex:1.2"><span class="lbl">연락처</span><input class="inp" id="f-phone" placeholder="010-0000-0000" inputmode="tel"></div>
-        <div style="flex:.8"><span class="lbl">나이</span><input type="number" class="inp" id="f-age" placeholder="예) 35" inputmode="numeric"></div>
+        <div style="flex:1.2"><span class="lbl">연락처</span><input class="inp" type="tel" id="f-phone" placeholder="010-0000-0000" inputmode="tel"></div>
+        <div style="flex:.8"><span class="lbl">나이</span><input type="number" class="inp" id="f-age" placeholder="예) 35" inputmode="numeric" pattern="[0-9]*"></div>
       </div>
       <div><span class="lbl">거주 지역</span><input class="inp" id="f-region" placeholder="예) 마포구"></div>
     </div>
