@@ -136,6 +136,9 @@ textarea.inp{resize:none;}
           <button class="btn-ghost" style="flex:1" onclick="copyFormUrl()">📋 링크 복사</button>
           <button class="btn-ghost" style="flex:1" onclick="shareFormUrl()">💬 카카오 공유</button>
         </div>
+        <div style="border-top:1px solid var(--sage-border);padding-top:12px;margin-top:4px">
+          <button id="notif-btn" onclick="requestNotif()" class="btn-ghost" style="width:100%;margin-bottom:12px;font-weight:700">🔔 알림 허용하기</button>
+        </div>
         <div style="border-top:1px solid var(--sage-border);padding-top:12px">
           <div style="font-size:11px;font-weight:700;color:var(--sage);margin-bottom:8px">📸 상담지 커버 사진 설정</div>
           <div class="mb10"><span class="lbl">커버 사진 URL</span><input class="inp" id="cover-url" placeholder="https://." style="font-size:12px" oninput="savePhotoUrls()"></div>
@@ -339,6 +342,27 @@ let checks={},radios={},formChecks={},formRadios={};
 let records=[],pendingForms=[];
 let currentDetailId=null,evalScores={},evalLrs={},evalMemos={};
 
+async function requestNotif(){
+  if(!('Notification' in window)){toast("이 브라우저는 알림을 지원하지 않아요");return;}
+  const perm = await Notification.requestPermission();
+  if(perm==="granted"){toast("✅ 알림이 설정됐어요! 새 상담지가 오면 알려드릴게요","var(--sage)");}
+  else{toast("알림이 거부됐어요. 설정에서 허용해주세요");}
+  updateNotifBtn();
+}
+function updateNotifBtn(){
+  const btn=document.getElementById("notif-btn");
+  if(!btn)return;
+  if(!('Notification' in window)){btn.style.display="none";return;}
+  if(Notification.permission==="granted"){
+    btn.textContent="🔔 알림 설정됨";
+    btn.style.background="var(--sage)";
+    btn.disabled=true;
+  } else {
+    btn.textContent="🔔 알림 허용하기";
+    btn.style.background="";
+    btn.disabled=false;
+  }
+}
 function uid(){return"r"+Date.now()+Math.random().toString(36).slice(2,6);}
 function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2400);}
 function fmt(d){if(!d)return"";return new Date(d).toLocaleDateString("ko-KR",{year:"numeric",month:"long",day:"numeric"});}
@@ -400,13 +424,6 @@ window.addEventListener("DOMContentLoaded",async()=>{
   renderGoalGrid("goal-grid-instructor",false);
   loadLocal();await loadFromSupabase();await loadPending();
   subscribeToNewForms();
-  // 알림 권한 요청
-  if(Notification.permission==="default"){
-    setTimeout(async()=>{
-      const perm = await Notification.requestPermission();
-      if(perm==="granted") toast("✅ 알림이 설정됐어요!");
-    }, 1500);
-  }
   // SW에 주기적으로 체크 메시지 (30초마다)
   if('serviceWorker' in navigator){
     setInterval(()=>{
@@ -415,6 +432,8 @@ window.addEventListener("DOMContentLoaded",async()=>{
       });
     }, 30000);
   }
+  // 알림 버튼 상태 업데이트
+  updateNotifBtn();
 });
 
 function loadLocal(){try{records=JSON.parse(localStorage.getItem("consult_v3")||"[]");}catch{records=[];}}
