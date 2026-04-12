@@ -281,6 +281,18 @@ textarea.inp{resize:none;}
 <div class="toast" id="toast"></div>
 
 <script>
+// Service Worker 등록
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/posture/sw.js', {scope: '/posture/'})
+    .then(reg => {
+      console.log('SW registered');
+      // 주기적 백그라운드 체크 등록
+      if ('periodicSync' in reg) {
+        reg.periodicSync.register('check-pending', {minInterval: 60000}).catch(()=>{});
+      }
+    }).catch(e => console.log('SW error:', e));
+}
+
 const SB_URL="https://phbdaxipaenyphwrebjz.supabase.co";
 const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBoYmRheGlwYWVueXBod3JlYmp6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5NTA4MTAsImV4cCI6MjA5MDUyNjgxMH0.ScVK7ckOjTS-umOUstlo-CgQAWJ5NpYXoSBrluxqvNM";
 const H={"Content-Type":"application/json","apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY};
@@ -388,7 +400,21 @@ window.addEventListener("DOMContentLoaded",async()=>{
   renderGoalGrid("goal-grid-instructor",false);
   loadLocal();await loadFromSupabase();await loadPending();
   subscribeToNewForms();
-  if(Notification.permission==="default"){setTimeout(()=>{if(confirm("새 상담지가 도착하면 알림으로 알려드릴까요?"))Notification.requestPermission();},2000);}
+  // 알림 권한 요청
+  if(Notification.permission==="default"){
+    setTimeout(async()=>{
+      const perm = await Notification.requestPermission();
+      if(perm==="granted") toast("✅ 알림이 설정됐어요!");
+    }, 1500);
+  }
+  // SW에 주기적으로 체크 메시지 (30초마다)
+  if('serviceWorker' in navigator){
+    setInterval(()=>{
+      navigator.serviceWorker.ready.then(reg=>{
+        reg.active?.postMessage('CHECK_PENDING');
+      });
+    }, 30000);
+  }
 });
 
 function loadLocal(){try{records=JSON.parse(localStorage.getItem("consult_v3")||"[]");}catch{records=[];}}
