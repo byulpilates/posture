@@ -438,7 +438,10 @@ function renderPending(){
       </div>
       ${f.body_text?`<div style="font-size:12px;color:var(--text2);background:white;padding:10px 12px;border-radius:10px;margin-bottom:8px;line-height:1.7;border:1px solid var(--border)">🌿 "${f.body_text}"</div>`:''}
       ${goalList.length?`<div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px">${goalList.slice(0,4).map(g=>`<span class="goal-tag">${g}</span>`).join('')}</div>`:''}
-      ${dxList.length?`<div style="font-size:11px;color:var(--yellow);font-weight:600;margin-bottom:8px">⚠ ${dxList.join(', ')}</div>`:''}
+      ${dxList.length?`<div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px">${dxList.map(d=>`<span style="display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;background:var(--yellow-bg);color:var(--yellow);border:1px solid #e8d8a0;font-weight:600">${d}</span>`).join('')}</div>`:''}
+      ${f.health?`<div style="font-size:12px;color:var(--text2);background:var(--bg);padding:8px 11px;border-radius:9px;margin-bottom:8px;border:1px solid var(--border);line-height:1.6">🏥 ${f.health}</div>`:''}
+      ${f.radios?.freq?`<div style="font-size:11px;color:var(--sage);font-weight:600;margin-bottom:6px">📅 ${{ '1':'주 1회','2':'주 2회','3':'주 3회 이상','flex':'유동적으로' }[f.radios.freq]||f.radios.freq}</div>`:''}
+      ${f.memo?`<div style="font-size:12px;color:var(--text2);padding:8px 11px;background:var(--bg2);border-radius:9px;margin-bottom:8px;line-height:1.6">💬 "${f.memo}"</div>`:''}
       <div style="display:flex;gap:6px;margin-bottom:8px">
         <input class="inp" id="cm-${f.id}" placeholder="콜백 메모 (선택)." value="${f.callback_memo||''}" style="font-size:12px;flex:1">
         <button class="btn-sm" onclick="saveCallbackMemo('${f.id}')">저장</button>
